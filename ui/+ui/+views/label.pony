@@ -4,25 +4,17 @@ actor Label is (Viewable & Colorable)
 		  
   var value:String
   
-  var font:Font
-  var fontJson:String
-  
   var fontRender:FontRender
   	
   new empty() =>
-    font = Font.empty()
     value = ""
-    
     _color = RGBA.black()
-    fontJson = ""
     fontRender = FontRender.empty()
   
-	new create(value':String, fontJson':String, fontSize':F32 = 16) =>
+	new create(value':String, font:Font val, fontSize':F32 = 16) =>
     value = value'
-    fontJson = fontJson'
     
     _color = RGBA.black()
-    font = Font(fontJson)
     fontRender = FontRender(font, fontSize', RGBA.black())
   
   be left() =>
@@ -45,4 +37,4 @@ actor Label is (Viewable & Colorable)
 	fun ref render(frameContext:FrameContext val, bounds:R4) =>
     fontRender.fontColor = _color
     let geom = fontRender.geometry(frameContext, value, bounds)
-    RenderPrimitive.renderCachedGeometry(frameContext, 0, ShaderType.sdf(), geom.vertices, geom.indices, fontRender.fontColor, font.name.cpointer())
+    RenderPrimitive.renderCachedGeometry(frameContext, 0, ShaderType.sdf(), geom.vertices, geom.indices, fontRender.fontColor, fontRender.font.name.cpointer())

@@ -6,7 +6,8 @@ actor ClearButton is Buttonable
   A button which has no visuals at all. You can use this to make invisible click areas wrapping other parts of your UI.
 
   Example:
-
+  
+  let font:Font = Font(TestFontJson())
   YogaNode.view( ClearButton.empty().>onClick({ 
     () =>
       @printf("clicked!\n".cstring())
@@ -14,7 +15,7 @@ actor ClearButton is Buttonable
         .>height(60)
         .>addChildren([
       YogaNode.view( Color(RGBA.grey()) ).>fill()
-      YogaNode.view( Label("Clear Tap Area", TestFontJson()) )
+      YogaNode.view( Label("Clear Tap Area", font) )
   ])
   """
   

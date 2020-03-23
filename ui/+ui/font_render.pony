@@ -79,7 +79,7 @@ class FontRender
     
     let fontAtlas = font.fontAtlas
     let glyphData = font.glyphData
-    var glyph = GlyphData.empty()
+    var glyph:GlyphData val = recover GlyphData.empty() end
     
     var start_of_word_index:USize = start_index
     var end_of_word_pen_x:F32 = pen_x

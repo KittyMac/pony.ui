@@ -3,6 +3,8 @@
 
 actor ButtonTest
   
+  let font:Font = Font(TestFontJson())
+  
 	new create(renderEngine:RenderEngine) =>
     let scene = recover iso 
       YogaNode.view( Color(RGBA(0.98,0.98,0.98,1)) ).>alignItems(_YgalignEnum.flexstart())
@@ -30,7 +32,7 @@ actor ButtonTest
                 .>height(60)
                 .>addChildren([
               YogaNode.view( Color(RGBA.gray()) ) .>addChild(
-                YogaNode.view( Label("Clear Tap Area", TestFontJson()).>center().>blue() )
+                YogaNode.view( Label("Clear Tap Area", font).>center().>blue() )
               )
           ])
           
@@ -50,7 +52,7 @@ actor ButtonTest
               @printf("clicked 4!\n".cstring())
             }) ).>width(300)
                 .>height(80) .>addChild(
-              YogaNode.view( Label("Click me!", TestFontJson(), 28).>center() )
+              YogaNode.view( Label("Click me!", font, 28).>center() )
             )
           
         ]

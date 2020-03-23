@@ -4,6 +4,7 @@
 actor FontTest
   
 	new create(renderEngine:RenderEngine) =>
+    let font:Font = Font(TestFontJson())
         
     let scene = recover iso 
       YogaNode.view( Color(RGBA(0.98,0.98,0.98,1)) ).>alignItems(_YgalignEnum.flexstart())
@@ -16,22 +17,22 @@ actor FontTest
           YogaNode.view( Color( RGBA(1,0,0,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(128).>center() )
+            YogaNode.view( Label(LoremText(), font).>size(128).>center() )
           )
           YogaNode.view( Color( RGBA(0,1,0,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(16).>right() )
+            YogaNode.view( Label(LoremText(), font).>size(16).>right() )
           )
           YogaNode.view( Color( RGBA(0,0,1,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(32).>top() )
+            YogaNode.view( Label(LoremText(), font).>size(32).>top() )
           )
           YogaNode.view( Color( RGBA(0,1,1,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(64).>bottom() )
+            YogaNode.view( Label(LoremText(), font).>size(64).>bottom() )
           )
           
           
@@ -40,22 +41,22 @@ actor FontTest
           YogaNode.view( Color( RGBA(0,1,1,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(64).>bottom() )
+            YogaNode.view( Label(LoremText(), font).>size(64).>bottom() )
           )
           YogaNode.view( Color( RGBA(1,0,0,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(128).>center() )
+            YogaNode.view( Label(LoremText(), font).>size(128).>center() )
           )
           YogaNode.view( Color( RGBA(0,1,0,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(16).>right() )
+            YogaNode.view( Label(LoremText(), font).>size(16).>right() )
           )
           YogaNode.view( Color( RGBA(0,0,1,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(32).>top() )
+            YogaNode.view( Label(LoremText(), font).>size(32).>top() )
           )
           
           
@@ -65,22 +66,22 @@ actor FontTest
           YogaNode.view( Color( RGBA(0,0,1,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(32).>top() )
+            YogaNode.view( Label(LoremText(), font).>size(32).>top() )
           )
           YogaNode.view( Color( RGBA(0,1,1,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(64).>bottom() )
+            YogaNode.view( Label(LoremText(), font).>size(64).>bottom() )
           )
           YogaNode.view( Color( RGBA(1,0,0,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(128).>center() )
+            YogaNode.view( Label(LoremText(), font).>size(128).>center() )
           )
           YogaNode.view( Color( RGBA(0,1,0,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(16).>right() )
+            YogaNode.view( Label(LoremText(), font).>size(16).>right() )
           )
           
           
@@ -90,22 +91,22 @@ actor FontTest
           YogaNode.view( Color( RGBA(0,1,0,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(16).>right() )
+            YogaNode.view( Label(LoremText(), font).>size(16).>right() )
           )
           YogaNode.view( Color( RGBA(0,0,1,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(32).>top() )
+            YogaNode.view( Label(LoremText(), font).>size(32).>top() )
           )
           YogaNode.view( Color( RGBA(0,1,1,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(64).>bottom() )
+            YogaNode.view( Label(LoremText(), font).>size(64).>bottom() )
           )
           YogaNode.view( Color( RGBA(1,0,0,0.1) ) ).> widthPercent(25).>
                                                       heightPercent(25).>
                                                       addChild(
-            YogaNode.view( Label(LoremText(), TestFontJson()).>size(128).>center() )
+            YogaNode.view( Label(LoremText(), font).>size(128).>center() )
           )
         ]
       )
