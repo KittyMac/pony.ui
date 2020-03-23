@@ -1,0 +1,8 @@
+build/*
+TAGS
+tags
+.deps/*
+libyoga/build/
+*.tar.gz
+_corral
+_repos

@@ -1,0 +1,22 @@
+{
+  "locks": [
+    {
+      "locator": "/Volumes/Development/Development/pony/pony.utility"
+    },
+    {
+      "locator": "/Volumes/Development/Development/pony/ponylang-linal"
+    },
+    {
+      "locator": "/Volumes/Development/Development/pony/pony.ttimer"
+    },
+    {
+      "locator": "/Volumes/Development/Development/pony/pony.stringext"
+    },
+    {
+      "locator": "/Volumes/Development/Development/pony/pony.bitmap"
+    },
+    {
+      "locator": "/Volumes/Development/Development/pony/pony.yoga"
+    }
+  ]
+}
