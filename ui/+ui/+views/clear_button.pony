@@ -14,7 +14,7 @@ actor ClearButton is Buttonable
         .>height(60)
         .>addChildren([
       YogaNode.view( Color(RGBA.grey()) ).>fill()
-      YogaNode.view( Label("Clear Tap Area", "SourceSansProRegular") )
+      YogaNode.view( Label("Clear Tap Area", TestFontJson()) )
   ])
   """
   

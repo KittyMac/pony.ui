@@ -30,7 +30,7 @@ actor ButtonTest
                 .>height(60)
                 .>addChildren([
               YogaNode.view( Color(RGBA.gray()) ) .>addChild(
-                YogaNode.view( Label("Clear Tap Area", "SourceSansProRegular").>center().>blue() )
+                YogaNode.view( Label("Clear Tap Area", TestFontJson()).>center().>blue() )
               )
           ])
           
@@ -50,7 +50,7 @@ actor ButtonTest
               @printf("clicked 4!\n".cstring())
             }) ).>width(300)
                 .>height(80) .>addChild(
-              YogaNode.view( Label("Click me!", "SourceSansProRegular", 28).>center() )
+              YogaNode.view( Label("Click me!", TestFontJson(), 28).>center() )
             )
           
         ]
