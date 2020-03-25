@@ -1,3 +1,5 @@
+use "utility"
+
 class val RGBA
   let r:F32
   let g:F32
@@ -5,6 +7,12 @@ class val RGBA
   let a:F32
   
   new val create(r':F32, g':F32, b':F32, a':F32) => r = r'; g = g'; b = b'; a = a'
+  new val u32(c:U32) =>
+    a = ((c >> 0) and 0xff).f32() / 255.0
+    b = ((c >> 8) and 0xff).f32() / 255.0
+    g = ((c >> 16) and 0xff).f32() / 255.0
+    r = ((c >> 24) and 0xff).f32() / 255.0
+    Log.println("%s, %s, %s, %s", r, g, b, a)
   
   new val empty() => r = 0; g = 0; b = 0; a = 0
   new val clear() => r = 0; g = 0; b = 0; a = 0

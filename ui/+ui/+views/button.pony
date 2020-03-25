@@ -8,15 +8,13 @@ actor Button is Buttonable
   
   Example:
   
-  YogaNode.view( Button.empty().>onClick({ 
-    () =>
-      @printf("clicked!\n".cstring())
-    }) ).>width(100)
-        .>height(100)
-        .>addChildren([
-      YogaNode.view( Color(RGBA.red()) )  // Red when not pressed
-      YogaNode.view( Color(RGBA.blue()) ) // Blue when pressed
-  ])
+  YogaNode.>width(100)
+          .>height(100)
+          .>view( Button.empty().>onClick({ () => @printf("clicked!\n".cstring()) }) )
+          .>addChildren([
+            YogaNode( Color(RGBA.red()) )  // Red when not pressed
+            YogaNode( Color(RGBA.blue()) ) // Blue when pressed
+          ])
   """
 
   new empty() =>

@@ -7,9 +7,11 @@ use "promises"
 type YogaNodeID is USize
 
 class YogaNode
-  let node:_YgnodeRef
-  let children:Array[YogaNode]
+  var node:_YgnodeRef tag
+  var _name:String val
   var _view:(Viewable|None)
+  
+  var children:Array[YogaNode]
   var last_bounds:R4 = R4fun.zero()
   var last_matrix:M4 = M4fun.id()
   
@@ -17,22 +19,13 @@ class YogaNode
     @printf("_final called on yoga node [%d]\n".cstring(), node)
     @YGNodeFree(node)
   
-  new empty() =>
-    children = Array[YogaNode](32)
-    node = @YGNodeNew()
-    _view = None
-  
 	new create() =>
     children = Array[YogaNode](32)
     node = @YGNodeNew()
+    _name = ""
     _view = None
-  
-	new view(_view':Viewable) =>
-    children = Array[YogaNode](32)
-    node = @YGNodeNew()
-    _view = _view'
     fill()
-    
+  
   fun id():YogaNodeID =>
     node.usize()
   
@@ -152,6 +145,13 @@ class YogaNode
       frameContext.renderNumber = n
     end
     n
+  
+  
+  fun ref view(view':Viewable) =>
+    _view = view'
+  
+  fun ref name(name':String val) =>
+    _name = name'
   
   fun ref fill() =>
     widthPercent(100)

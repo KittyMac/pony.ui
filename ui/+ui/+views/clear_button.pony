@@ -8,15 +8,13 @@ actor ClearButton is Buttonable
   Example:
   
   let font:Font = Font(TestFontJson())
-  YogaNode.view( ClearButton.empty().>onClick({ 
-    () =>
-      @printf("clicked!\n".cstring())
-    }) ).>width(200)
-        .>height(60)
-        .>addChildren([
-      YogaNode.view( Color(RGBA.grey()) ).>fill()
-      YogaNode.view( Label("Clear Tap Area", font) )
-  ])
+  YogaNode.>width(200)
+          .>height(60)
+          .>view( ClearButton.empty().>onClick({ () => @printf("clicked!\n".cstring()) }) )
+          .>addChildren([
+            YogaNode.>view( Color(RGBA.grey()) ).>fill()
+            YogaNode.>view( Label("Clear Tap Area", font) )
+          ])
   """
   
   new empty() =>

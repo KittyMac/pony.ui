@@ -11,7 +11,7 @@ primitive ImageMode
 
 trait Imageable is (Viewable & Colorable)
   var _textureName:String = ""
-  var _mode:ImageModeType = ImageMode.aspectFit()
+  var _mode:ImageModeType = ImageMode.fill()
   var _sizeToFit:Bool = false
   var stretch_insets:V4 = V4fun.zero()
   

@@ -1,5 +1,6 @@
 use "linal"
 use "stringext"
+use "utility"
 
 actor ImageButton is (Imageable & Buttonable)
   """
@@ -7,33 +8,39 @@ actor ImageButton is (Imageable & Buttonable)
 
   Example:
 
-  YogaNode.view( ImageButton( "unpressed_button", "pressed_button" ).>sizeToFit()
-                                                                    .>onClick({ 
+  YogaNode.view(ImageButton( "unpressed_button", "pressed_button" ).>sizeToFit()
+                                                               .>onClick({ 
     () =>
       @printf("clicked 3!\n".cstring())
-    }) )
+    }))
   """
 
   var unpressedImage:String
   var pressedImage:String
   
   var _pressedColor:RGBA
-  var _savedColor:RGBA
+  var _unpressedColor:RGBA
   
   new empty() =>
     unpressedImage = ""
     pressedImage = ""
     _pressedColor = RGBA.white()
-    _savedColor = RGBA.white()
+    _unpressedColor = RGBA.white()
   
 	new create(unpressedImage':String, pressedImage':String, pressedColor':RGBA = RGBA.white()) =>
     unpressedImage = unpressedImage'
     pressedImage = pressedImage'
     _pressedColor = pressedColor'
-    _savedColor = pressedColor'
+    _unpressedColor = pressedColor'
   
-  be pressedColor(pressedColor':RGBA) =>
-    _pressedColor = pressedColor'
+  be pressedColor(rgba:RGBA) =>
+    _pressedColor = rgba
+    bufferedGeometry.invalidate()
+  
+  be color(rgba:RGBA) =>
+    _unpressedColor = rgba
+    _color = rgba
+    bufferedGeometry.invalidate()
   
   fun ref start(frameContext:FrameContext val) =>
     _textureName = unpressedImage
@@ -42,12 +49,12 @@ actor ImageButton is (Imageable & Buttonable)
   fun ref updateButton(pressed:Bool) =>
     if pressed then
       _textureName = pressedImage
-      _savedColor = _color
       _color = _pressedColor
     else
       _textureName = unpressedImage
-      _color = _savedColor
+      _color = _unpressedColor
     end
+    bufferedGeometry.invalidate()
     engine.setNeedsRendered()
 
   fun ref event(frameContext:FrameContext val, anyEvent:AnyEvent val, bounds:R4) =>

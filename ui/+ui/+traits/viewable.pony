@@ -1,4 +1,5 @@
 use "linal"
+use "utility"
 
 trait tag Viewable
   var engine:RenderEngine = RenderEngine.empty()
@@ -15,6 +16,7 @@ trait tag Viewable
     | let inv_matrix:M4 =>
       V3fun.v2(M4fun.mul_v3_point_3x4(inv_matrix, V3fun(point._1, point._2, 0.0)))
     else
+      @printf("WARNING: unable to invert matrix in inverseTransformPoint".cstring())
       point
     end
   

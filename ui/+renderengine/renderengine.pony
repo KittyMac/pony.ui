@@ -93,11 +93,11 @@ actor@ RenderEngine
     @RenderEngine_destroy(renderContext)
   
   new empty() =>
-    node = YogaNode.empty()
+    node = YogaNode
     renderContext = RenderContextRef
   
 	new create() =>
-    node = YogaNode.empty()
+    node = YogaNode
     renderContext = @RenderEngine_init(this)
   
   be addNode(yoga:YogaNode iso) =>
