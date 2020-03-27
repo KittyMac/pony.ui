@@ -10,7 +10,7 @@ actor ImageTest
               .>flexDirection(_YgflexDirectionEnum.row())
               .>flexWrap(_YgwrapEnum.wrap())
               .>padding(_YgedgeEnum.all(), 40)
-              .>view( Color(RGBA(0.98,0.98,0.98,1)) )
+              .>view( Color.>color(RGBA(0.98,0.98,0.98,1)) )
               .>addChildren( [
                                                         
           YogaNode.>width(256).>height(256).>view( Image( "unpressed_button" ).>sizeToFit().>color(RGBA(1,1,1,1.0 )) )
@@ -26,7 +26,7 @@ actor ImageTest
           
           YogaNode.>width(256)
                   .>height(512)
-                  .>view( Color.empty().>gray() )
+                  .>view( Color.>gray() )
                   .>addChild( YogaNode.>view( Image( "landscape_desert" ).>aspectFit() ) )
           
           YogaNode.>width(256)
@@ -39,7 +39,7 @@ actor ImageTest
           
           YogaNode.>width(512)
                   .>height(256)
-                  .>view( Color.empty().>gray() )
+                  .>view( Color.>gray() )
                   .>addChild( YogaNode.>view( Image( "landscape_desert" ).>aspectFit() ) )
           
           YogaNode.>width(512)

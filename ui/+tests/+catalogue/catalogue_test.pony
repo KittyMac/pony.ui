@@ -1,17 +1,26 @@
 use "utility"
 
+primitive SwitchToColors is Action
+primitive SwitchToButtons is Action
+primitive SwitchToImages is Action
+primitive SwitchToFonts is Action
 
-actor UICatalog
+type CatalogAction is (SwitchToColors | SwitchToButtons | SwitchToImages | SwitchToFonts)
+  
+
+actor Catalog is Controller
   // Our UI is a side-bar of menu items and a right panel which switches between the various tests
   
   let font:Font = Font(TestFontJson())
+  let renderEngine:RenderEngine
+    
+	new create(renderEngine':RenderEngine) =>
+    renderEngine = renderEngine'
   
-	new create(renderEngine:RenderEngine) =>
     let scene = recover iso
       YogaNode.>alignItems(_YgalignEnum.flexstart())
               .>flexDirection(_YgflexDirectionEnum.row())
-              .>flexWrap(_YgwrapEnum.wrap())
-              .>view( Color(RGBA(0.98,0.98,0.98,1)) )
+              .>view( Color.>color(RGBA(0.98,0.98,0.98,1)) )
               .>addChildren( [
           
           // Sidebar
@@ -19,34 +28,67 @@ actor UICatalog
                   .>heightPercent(100)
                   .>view( Image("sidebar").>stretch(10,10,10,10) )
                   .>addChildren([
-              menuButton("Colors", font)
-              menuButton("Buttons", font)
-              menuButton("Images", font)
-              menuButton("Fonts", font)
+              menuButton("Colors", font, SwitchToColors)
+              menuButton("Buttons", font, SwitchToButtons)
+              menuButton("Images", font, SwitchToImages)
+              menuButton("Fonts", font, SwitchToFonts)
           ])
           
           // Panel
           YogaNode.>name("Panel")
-                  .>view(Clear.empty())
+                  .>view( Clear )
                   .>fill()
-          
+                            
         ]
       )
     end
+    
     renderEngine.addNode(consume scene)
   
-  fun tag menuButton(title:String, font':Font):YogaNode =>
-    // TODO: how to easily respond to events and cause actions to take place
-    // against other nodes.
-    // Ideas:
-    // 1. Be able to attach a string identifier to any node, be able to quickly
-    //    look that node up based upon its string identifier
-    
+  fun tag menuButton(title:String, font':Font, evt:CatalogAction):YogaNode =>
     YogaNode.>width(204)
             .>height(46)
             .>padding(_YgedgeEnum.all(), 6)
             .>padding(_YgedgeEnum.left(), 12)
             .>view( ImageButton( "white", "white").>pressedColor(RGBA.u32( 0x98cbf3ff ))
                                                   .>color(RGBA.u32( 0xffffff00 ))
-                                                  .>onClick({ () => Log.println("Clicked %s", title) }) )
+                                                  .>action(this, evt) )
             .>addChild( YogaNode.>view( Label(title, font', 28).>left() ) )
+
+    
+  
+  be action(evt:Action) =>
+    match evt
+    | SwitchToColors =>
+      
+      renderEngine.getNodeByName("Panel", { (node) => 
+        node.removeChildren()
+        node.addChild( YogaNode.>view( Color.>red() ) )
+        true
+      })
+      
+    | SwitchToButtons => Log.println("switch to buttons")
+      
+      renderEngine.getNodeByName("Panel", { (node) => 
+        node.removeChildren()
+        node.addChild( YogaNode.>view( Color.>green() ) )
+        true
+      })
+      
+    | SwitchToImages => Log.println("switch to images")
+      
+      renderEngine.getNodeByName("Panel", { (node) => 
+        node.removeChildren()
+        node.addChild( YogaNode.>view( Color.>yellow() ) )
+        true
+      })
+      
+    | SwitchToFonts => Log.println("switch to fonts")
+      
+      renderEngine.getNodeByName("Panel", { (node) => 
+        node.removeChildren()
+        node.addChild( YogaNode.>view( Color.>magenta() ) )
+        true
+      })
+    end
+    

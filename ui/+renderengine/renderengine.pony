@@ -109,6 +109,9 @@ actor@ RenderEngine
     waitingOnViewsToRender = node.start(frameContext)
     
   
+  be getNodeByName(nodeName:String val, callback:GetYogaNodeCallback val) =>
+    layoutNeeded = node.getNodeByName(nodeName, callback) or layoutNeeded
+  
   be getNodeByID(id:YogaNodeID, callback:GetYogaNodeCallback val) =>
     layoutNeeded = node.getNodeByID(id, callback) or layoutNeeded
   
@@ -133,6 +136,7 @@ actor@ RenderEngine
     layoutNeeded = false
     renderNeeded = true
     node.layout()
+    //node.print()
     
   be renderAll() =>
     // run through all yoga nodes and render their associated views

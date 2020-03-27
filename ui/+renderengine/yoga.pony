@@ -38,6 +38,14 @@ class YogaNode
       addChild(child)
     end
   
+  fun ref removeChild(child:YogaNode) =>
+    @YGNodeRemoveChild(node, child.node)
+    children.deleteOne(child)
+  
+  fun ref removeChildren() =>
+    children.clear()
+    @YGNodeRemoveAllChildren(node)
+  
   fun ref layout() =>
     // Before we can calculate the layout, we need to see if any of our children sizeToFit their content. If we do, we need
     // to have them set the size on the appropriate yoga node
@@ -46,6 +54,18 @@ class YogaNode
   fun print() =>
     @YGNodePrint(node, _YgprintOptionsEnum.layout() or _YgprintOptionsEnum.style() or _YgprintOptionsEnum.children())
     @printf("\n".cstring())
+  
+  fun ref getNodeByName(nodeName:String val, callback:GetYogaNodeCallback val ):Bool =>
+    if _name == nodeName then
+      return callback(this)
+    end
+  
+    for child in children.values() do
+      if child.getNodeByName(nodeName, callback) then
+        return true
+      end
+    end
+    false
   
   fun ref getNodeByID(nodeID:YogaNodeID, callback:GetYogaNodeCallback val ):Bool =>
     if id() == nodeID then

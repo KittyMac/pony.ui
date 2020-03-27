@@ -12,7 +12,6 @@ class val RGBA
     b = ((c >> 8) and 0xff).f32() / 255.0
     g = ((c >> 16) and 0xff).f32() / 255.0
     r = ((c >> 24) and 0xff).f32() / 255.0
-    Log.println("%s, %s, %s, %s", r, g, b, a)
   
   new val empty() => r = 0; g = 0; b = 0; a = 0
   new val clear() => r = 0; g = 0; b = 0; a = 0

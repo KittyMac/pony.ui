@@ -11,7 +11,7 @@ actor ButtonTest
               .>flexDirection(_YgflexDirectionEnum.row())
               .>flexWrap(_YgwrapEnum.wrap())
               .>padding(_YgedgeEnum.all(), 40)
-              .>view( Color(RGBA(0.98,0.98,0.98,1)) )
+              .>view( Color.>color(RGBA(0.98,0.98,0.98,1)) )
               .>addChildren( [
                                                       
           // the big, red button
@@ -19,8 +19,8 @@ actor ButtonTest
                   .>height(100)
                   .>view( Button.empty().>onClick({ () => @printf("clicked 1!\n".cstring()) }) )
                   .>addChildren([
-              YogaNode.>view( Color(RGBA.red()) )
-              YogaNode.>view( Color(RGBA.blue()) )
+              YogaNode.>view( Color.>red() )
+              YogaNode.>view( Color.>blue() )
           ])
           
           // clear tap area
@@ -28,7 +28,7 @@ actor ButtonTest
                   .>height(60)
                   .>view( ClearButton.empty().>onClick({ () => @printf("clicked 2!\n".cstring()) }) )
                   .>addChildren([
-                YogaNode.>view( Color(RGBA.gray()) )
+                YogaNode.>view( Color.>gray() )
                         .>addChild( YogaNode.>view( Label("Clear Tap Area", font).>center().>blue() ) )
           ])
           

@@ -12,7 +12,7 @@ actor ClearButton is Buttonable
           .>height(60)
           .>view( ClearButton.empty().>onClick({ () => @printf("clicked!\n".cstring()) }) )
           .>addChildren([
-            YogaNode.>view( Color(RGBA.grey()) ).>fill()
+            YogaNode.>view( Color.>grey() )
             YogaNode.>view( Label("Clear Tap Area", font) )
           ])
   """

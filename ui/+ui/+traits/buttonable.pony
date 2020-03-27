@@ -2,7 +2,7 @@ use "linal"
 
 type ButtonClickedCallback is {()}
 
-trait Buttonable is Viewable
+trait Buttonable is (Viewable & Actionable)
   """
   For button-like things which need to track when they are being pressed and perform action when they are unpressed
   """
@@ -14,10 +14,11 @@ trait Buttonable is Viewable
   var buttonPressed:Bool = false
   
   fun ref performClick() =>
+    performAction()
     clickedCallback()
   
   fun ref updateButton(pressed:Bool) =>
-    None
+    None    
   
   be onClick(clickedCallback':ButtonClickedCallback val) =>
     clickedCallback = clickedCallback'

@@ -12,8 +12,8 @@ actor Button is Buttonable
           .>height(100)
           .>view( Button.empty().>onClick({ () => @printf("clicked!\n".cstring()) }) )
           .>addChildren([
-            YogaNode( Color(RGBA.red()) )  // Red when not pressed
-            YogaNode( Color(RGBA.blue()) ) // Blue when pressed
+            YogaNode( Color.>red() )  // Red when not pressed
+            YogaNode( Color.>blue() ) // Blue when pressed
           ])
   """
 

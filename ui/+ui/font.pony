@@ -19,7 +19,6 @@ class val Font
     try
       fontAtlas = FontAtlas.fromString(fontJson)?
       name = fontAtlas.name
-      Log.println("font name: %s", name)
       for glyph in fontAtlas.glyph_data.values() do
         try
           glyphData(glyph.charcode(0)?) = glyph.clone()?

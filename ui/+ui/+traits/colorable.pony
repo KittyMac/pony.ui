@@ -4,6 +4,8 @@ trait Colorable
   
   be color(rgba:RGBA) => _color = rgba
   
+  be alpha(a:F32) => _color = RGBA(_color.r, _color.g, _color.b, a)
+  
   be clear() => _color = RGBA.clear()
   be white() => _color = RGBA.white()
   be black() => _color = RGBA.black()

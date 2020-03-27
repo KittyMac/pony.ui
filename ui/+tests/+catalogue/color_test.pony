@@ -8,21 +8,21 @@ actor ColorTest
             .>flexDirection(_YgflexDirectionEnum.row())
             .>flexWrap(_YgwrapEnum.wrap())
             .>padding(_YgedgeEnum.all(), 40)
-            .>view( Color(RGBA(0.98,0.98,0.98,1)) )
+            .>view( Color.>color(RGBA(0.98,0.98,0.98,1)) )
             .>addChildren( [
                                                       
           YogaNode.>widthPercent(50)
                   .>heightPercent(50)
-                  .>view( Color( RGBA.red() ) )
+                  .>view( Color.>red() )
           YogaNode.>widthPercent(50)
                   .>heightPercent(50)
-                  .>view( Color( RGBA.green() ) )
+                  .>view( Color.>green() )
           YogaNode.>widthPercent(50)
                   .>heightPercent(50)
-                  .>view( Color( RGBA.blue() ) )
+                  .>view( Color.>blue() )
           YogaNode.>widthPercent(50)
                   .>heightPercent(50)
-                  .>view( Color( RGBA.yellow() ) )
+                  .>view( Color.>yellow() )
         ])
     end
     
