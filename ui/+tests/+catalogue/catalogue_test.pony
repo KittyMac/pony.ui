@@ -8,21 +8,18 @@ primitive SwitchToFonts is Action
 type CatalogAction is (SwitchToColors | SwitchToButtons | SwitchToImages | SwitchToFonts)
   
 
-actor Catalog is Controller
+actor Catalog is Controllerable
   // Our UI is a side-bar of menu items and a right panel which switches between the various tests
   
   let font:Font = Font(TestFontJson())
-  let renderEngine:RenderEngine
-    
-	new create(renderEngine':RenderEngine) =>
-    renderEngine = renderEngine'
   
-    let scene = recover iso
+  fun ref mainNode():YogaNode iso^ =>
+    recover iso
       YogaNode.>alignItems(_YgalignEnum.flexstart())
               .>flexDirection(_YgflexDirectionEnum.row())
               .>view( Color.>color(RGBA(0.98,0.98,0.98,1)) )
               .>addChildren( [
-          
+        
           // Sidebar
           YogaNode.>width(210)
                   .>heightPercent(100)
@@ -33,17 +30,17 @@ actor Catalog is Controller
               menuButton("Images", font, SwitchToImages)
               menuButton("Fonts", font, SwitchToFonts)
           ])
-          
+        
           // Panel
           YogaNode.>name("Panel")
                   .>view( Clear )
+                  .>flexGrow(1.0)
+                  .>flexShrink(1.0)
                   .>fill()
-                            
+          
         ]
       )
     end
-    
-    renderEngine.addNode(consume scene)
   
   fun tag menuButton(title:String, font':Font, evt:CatalogAction):YogaNode =>
     YogaNode.>width(204)
@@ -56,39 +53,14 @@ actor Catalog is Controller
             .>addChild( YogaNode.>view( Label(title, font', 28).>left() ) )
 
     
-  
   be action(evt:Action) =>
-    match evt
-    | SwitchToColors =>
-      
-      renderEngine.getNodeByName("Panel", { (node) => 
-        node.removeChildren()
-        node.addChild( YogaNode.>view( Color.>red() ) )
-        true
-      })
-      
-    | SwitchToButtons => Log.println("switch to buttons")
-      
-      renderEngine.getNodeByName("Panel", { (node) => 
-        node.removeChildren()
-        node.addChild( YogaNode.>view( Color.>green() ) )
-        true
-      })
-      
-    | SwitchToImages => Log.println("switch to images")
-      
-      renderEngine.getNodeByName("Panel", { (node) => 
-        node.removeChildren()
-        node.addChild( YogaNode.>view( Color.>yellow() ) )
-        true
-      })
-      
-    | SwitchToFonts => Log.println("switch to fonts")
-      
-      renderEngine.getNodeByName("Panel", { (node) => 
-        node.removeChildren()
-        node.addChild( YogaNode.>view( Color.>magenta() ) )
-        true
-      })
+    if renderEngine as RenderEngine then
+        match evt
+        | SwitchToColors => ColorTest.load(renderEngine, "Panel")
+        | SwitchToButtons => ButtonTest.load(renderEngine, "Panel")
+        | SwitchToImages => ImageTest.load(renderEngine, "Panel")
+        | SwitchToFonts => FontTest.load(renderEngine, "Panel")
+        end
     end
+    
     

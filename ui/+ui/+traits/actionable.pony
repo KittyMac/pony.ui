@@ -8,14 +8,14 @@ trait Actionable
   """
   For things which support the Controller events system
   """
-  var target:(Controller tag | None) = None
+  var target:(Controllerable tag | None) = None
   var evt:Action = UnknownAction
   
-  be action(target':Controller tag, evt':Action) =>
+  be action(target':Controllerable tag, evt':Action) =>
     target = target'
     evt = evt'
   
   be performAction() =>
     match target
-    | let t:Controller tag => t.action(evt)
+    | let t:Controllerable tag => t.action(evt)
     else None end

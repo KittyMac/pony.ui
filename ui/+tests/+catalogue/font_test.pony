@@ -1,12 +1,11 @@
 
 
 
-actor FontTest
+actor FontTest is Controllerable
   
-	new create(renderEngine:RenderEngine) =>
-    let font:Font = Font(TestFontJson())
-        
-    let scene = recover iso 
+	fun ref mainNode():YogaNode iso^ =>
+    let font:Font = Font(TestFontJson())    
+    recover iso 
       YogaNode.>alignItems(_YgalignEnum.flexstart())
               .>flexDirection(_YgflexDirectionEnum.row())
               .>flexWrap(_YgwrapEnum.wrap())
@@ -89,5 +88,3 @@ actor FontTest
         ]
       )
     end
-    
-    renderEngine.addNode(consume scene)

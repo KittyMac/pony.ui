@@ -1,12 +1,12 @@
 
 
 
-actor ButtonTest
+actor ButtonTest is Controllerable
   
   let font:Font = Font(TestFontJson())
   
-	new create(renderEngine:RenderEngine) =>
-    let scene = recover iso 
+	fun ref mainNode():YogaNode iso^ =>
+    recover iso 
       YogaNode.>alignItems(_YgalignEnum.flexstart())
               .>flexDirection(_YgflexDirectionEnum.row())
               .>flexWrap(_YgwrapEnum.wrap())
@@ -48,6 +48,4 @@ actor ButtonTest
         ]
       )
     end
-  
-    renderEngine.addNode(consume scene)
     

@@ -55,29 +55,29 @@ class YogaNode
     @YGNodePrint(node, _YgprintOptionsEnum.layout() or _YgprintOptionsEnum.style() or _YgprintOptionsEnum.children())
     @printf("\n".cstring())
   
-  fun ref getNodeByName(nodeName:String val, callback:GetYogaNodeCallback val ):Bool =>
+  fun ref getNodeByName(nodeName:String val):(YogaNode|None) =>
     if _name == nodeName then
-      return callback(this)
+      return this
     end
-  
     for child in children.values() do
-      if child.getNodeByName(nodeName, callback) then
-        return true
+      let result = child.getNodeByName(nodeName)
+      if result as YogaNode then
+        return result
       end
     end
-    false
+    None
   
-  fun ref getNodeByID(nodeID:YogaNodeID, callback:GetYogaNodeCallback val ):Bool =>
+  fun ref getNodeByID(nodeID:YogaNodeID):(YogaNode|None) =>
     if id() == nodeID then
-      return callback(this)
+      return this
     end
-    
     for child in children.values() do
-      if child.getNodeByID(nodeID, callback) then
-        return true
+      let result = child.getNodeByID(nodeID)
+      if result as YogaNode then
+        return result
       end
     end
-    false
+    None
   
   // Called when the node is first added to the render engine hierarchy
   fun ref start(frameContext:FrameContext):U64 =>

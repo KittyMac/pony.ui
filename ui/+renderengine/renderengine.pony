@@ -10,7 +10,7 @@ use @RenderEngine_destroy[None](ctx:RenderContextRef tag)
 primitive RenderContext
 type RenderContextRef is Pointer[RenderContext]
 
-type GetYogaNodeCallback is {(YogaNode ref):Bool}
+type GetYogaNodeCallback is {(YogaNode ref):Bool} val
 
 
 // Context passed to all views when they are told to render. It contains information
@@ -79,6 +79,7 @@ actor@ RenderEngine
   
   var layoutNeeded:Bool = false
   var renderNeeded:Bool = false
+  var startNeeded:Bool = false
   
   var frameNumber:U64 = 0
   var waitingOnViewsToRender:U64 = 0
@@ -89,31 +90,55 @@ actor@ RenderEngine
   fun _batch():U32 => 5_000_000
   fun _prioritiy():U32 => 999
   
+  fun tag root():String val => "Root"
+  
   fun _final() =>
     @RenderEngine_destroy(renderContext)
   
   new empty() =>
-    node = YogaNode
+    node = YogaNode.>name(root())
     renderContext = RenderContextRef
   
 	new create() =>
-    node = YogaNode
+    node = YogaNode.>name(root())
     renderContext = @RenderEngine_init(this)
+  
+  fun ref handleNewNodeAdded() =>
+    startNeeded = true
+  
+  be addToNodeByName(nodeName:String val, yoga:YogaNode iso) =>
+    let found_node = node.getNodeByName(nodeName)
+    
+    match found_node
+    | let n:YogaNode => 
+      n.removeChildren()
+      n.addChild( consume yoga )
+    end
+    
+    // TODO: this doesn't compile, fix!
+    /*
+    if found_node as YogaNode then
+      found_node.addChild( consume yoga )
+    end
+    */
+    handleNewNodeAdded()
+    
   
   be addNode(yoga:YogaNode iso) =>
     node.addChild( consume yoga )
-    
-    // after we first add a node, we need to do an immediate layout and a fake render
-    // (or views whose layout depends on the size of their content)
-    let frameContext = FrameContext(this, renderContext, node.id(), 0, 0, M4fun.id())
-    waitingOnViewsToRender = node.start(frameContext)
-    
+    handleNewNodeAdded()
   
-  be getNodeByName(nodeName:String val, callback:GetYogaNodeCallback val) =>
-    layoutNeeded = node.getNodeByName(nodeName, callback) or layoutNeeded
+  be getNodeByName(nodeName:String val, callback:GetYogaNodeCallback) =>
+    let found_node = node.getNodeByName(nodeName)
+    if found_node as YogaNode then
+      layoutNeeded = callback(found_node) or layoutNeeded
+    end
   
-  be getNodeByID(id:YogaNodeID, callback:GetYogaNodeCallback val) =>
-    layoutNeeded = node.getNodeByID(id, callback) or layoutNeeded
+  be getNodeByID(id:YogaNodeID, callback:GetYogaNodeCallback) =>
+    let found_node = node.getNodeByID(id)
+    if found_node as YogaNode then
+      layoutNeeded = callback(found_node) or layoutNeeded
+    end
   
   be updateBounds(w:F32, h:F32) =>
   // update the size of my node to match the window, then relayout everything
@@ -141,6 +166,16 @@ actor@ RenderEngine
   be renderAll() =>
     // run through all yoga nodes and render their associated views
     // keep track of how many views were told to render so we can know when they're all done
+    
+    if startNeeded then
+      if (waitingOnViewsToRender == 0) then
+        let frameContext = FrameContext(this, renderContext, node.id(), 0, 0, M4fun.id())
+        waitingOnViewsToRender = node.start(frameContext)
+        startNeeded = false
+      else
+        return
+      end
+    end
     
     if layoutNeeded then
       layout()
@@ -174,6 +209,9 @@ actor@ RenderEngine
       Log.println("Error: startFinished called but waitingOnViewsToRender is 0")
     else
       waitingOnViewsToRender = waitingOnViewsToRender - 1
+      if waitingOnViewsToRender == 0 then
+        layoutNeeded = true
+      end
     end
   
   be renderFinished() =>

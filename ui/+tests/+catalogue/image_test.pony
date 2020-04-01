@@ -1,11 +1,10 @@
 
 
 
-actor ImageTest
+actor ImageTest is Controllerable
   
-	new create(renderEngine:RenderEngine) =>
-        
-    let scene = recover iso 
+  fun ref mainNode():YogaNode iso^ =>    
+    recover iso 
       YogaNode.>alignItems(_YgalignEnum.flexstart())
               .>flexDirection(_YgflexDirectionEnum.row())
               .>flexWrap(_YgwrapEnum.wrap())
@@ -51,5 +50,3 @@ actor ImageTest
         ]
       )
     end
-    
-    renderEngine.addNode(consume scene)
