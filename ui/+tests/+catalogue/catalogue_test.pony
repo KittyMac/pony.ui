@@ -14,7 +14,7 @@ actor Catalog is Controllerable
   let font:Font = Font(TestFontJson())
   
   fun ref mainNode():YogaNode iso^ =>
-    recover iso
+    let main = recover iso
       YogaNode.>alignItems(_YgalignEnum.flexstart())
               .>flexDirection(_YgflexDirectionEnum.row())
               .>view( Color.>color(RGBA(0.98,0.98,0.98,1)) )
@@ -41,6 +41,10 @@ actor Catalog is Controllerable
         ]
       )
     end
+    
+    action(SwitchToColors)
+    
+    main
   
   fun tag menuButton(title:String, font':Font, evt:CatalogAction):YogaNode =>
     YogaNode.>width(204)
