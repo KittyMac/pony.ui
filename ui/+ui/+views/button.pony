@@ -27,22 +27,24 @@ actor Button is Buttonable
     buttonable_event(frameContext, anyEvent, bounds)
   
   fun ref updateChildren(showChildIdx:USize, isStart:Bool = false) =>
-    engine.getNodeByID(nodeID, { (node) =>
-      var childIdx:USize = 0
-      for child in node.children.values() do
-        if showChildIdx == childIdx then
-          child.>display(_YgdisplayEnum.flex())
-        else
-          child.>display(_YgdisplayEnum.none())
-        end
-        childIdx = childIdx + 1
-      end
-    
-      if isStart then
-        engine.startFinished()
-      end
-      true
-    })
+    if engine as RenderEngine then
+        engine.getNodeByID(nodeID, { (node) =>
+          var childIdx:USize = 0
+          for child in node.children.values() do
+            if showChildIdx == childIdx then
+              child.>display(_YgdisplayEnum.flex())
+            else
+              child.>display(_YgdisplayEnum.none())
+            end
+            childIdx = childIdx + 1
+          end
+        
+          if isStart and (engine as RenderEngine) then
+            engine.startFinished()
+          end
+          true
+        })
+    end
   
   fun ref start(frameContext:FrameContext val) =>
     updateChildren(0, true)

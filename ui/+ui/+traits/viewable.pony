@@ -2,7 +2,7 @@ use "linal"
 use "utility"
 
 trait tag Viewable
-  var engine:RenderEngine = RenderEngine.empty()
+  var engine:(RenderEngine|None) = None
   var nodeID:YogaNodeID = 0
   
   
