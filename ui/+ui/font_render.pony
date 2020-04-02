@@ -31,7 +31,7 @@ struct GlyphRenderData
   var th:F32 = 0
   
   new zero() =>
-    None
+    bx = 0
   
   new create(bx':F32, by':F32, bw':F32, bh':F32, tx':F32, ty':F32, tw':F32, th':F32) =>
     bx = bx'
@@ -85,40 +85,47 @@ class FontRender
     var end_of_word_pen_x:F32 = pen_x
     
     let bounds_xmax = R4fun.x_max(bounds)
-    //let bounds_ymax = R4fun.y_max(bounds)
     
     let space_advance = fontAtlas.space_advance.f32() * fontSize
     var localWrap = FontWrap.character()
+    
+    let zeroGlyph = GlyphRenderData.zero()
         
     try
       
-      while i < text.size() do
+      let text_size = text.size()
+      while i < text_size do
         let c = text(i)?
         i = i + 1
         
         if c == '\n' then
+          end_of_word_pen_x = pen_x
+          localWrap = fontWrap
+          start_of_word_index = i
+          glyphRenderData.push(zeroGlyph)
           break
-        end
-        if c == ' ' then
+        elseif c == ' ' then
           end_of_word_pen_x = pen_x
           pen_x = pen_x + space_advance
           localWrap = fontWrap
           start_of_word_index = i
-          glyphRenderData.push(GlyphRenderData.zero())
+          glyphRenderData.push(zeroGlyph)
           continue
-        end
-        if c == '\t' then
+        elseif c == '\t' then
           pen_x = pen_x + (space_advance * 2)
           localWrap = fontWrap
           start_of_word_index = i
-          glyphRenderData.push(GlyphRenderData.zero())
+          glyphRenderData.push(zeroGlyph)
           continue
         end
         
         glyph = try 
-          glyphData(c)?
+          glyphData(c.usize())?
         else
+          end_of_word_pen_x = pen_x
+          localWrap = fontWrap
           start_of_word_index = i
+          glyphRenderData.push(zeroGlyph)
           continue
         end
         
@@ -141,14 +148,9 @@ class FontRender
         var y = pen_y - g_bearing_y
         let w = g_width
         let h = g_height
-        /*
-        if (localWrap == FontWrap.word()) and (pen_y >= bounds_ymax) then
-          break
-        end
-        */
+        
         // if drawing this glyph will exceed the width of our draw box...
-        let xCheck = (x + w)
-        if xCheck >= bounds_xmax then
+        if (x + w) >= bounds_xmax then
           if localWrap == FontWrap.word() then
             pen_x = end_of_word_pen_x
             i = start_of_word_index

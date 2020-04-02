@@ -59,9 +59,11 @@ class AlignedArray[A] is Seq[A]
     """
     Add an element to the end of the array.
     """
-    reserve(_size + 1)
-    _ptr.update(_size, consume value)
     _size = _size + 1
+    if _size >= _alloc then
+      reserve(_size)
+    end
+    _ptr.update(_size-1, consume value)
   
   fun ref update(i: USize, value: A): A^ ? =>
     """

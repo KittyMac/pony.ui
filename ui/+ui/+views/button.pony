@@ -39,8 +39,10 @@ actor Button is Buttonable
             childIdx = childIdx + 1
           end
         
-          if isStart and (engine as RenderEngine) then
-            engine.startFinished()
+          if isStart then
+            if engine as RenderEngine then
+              engine.startFinished()
+            end
           end
           true
         })
