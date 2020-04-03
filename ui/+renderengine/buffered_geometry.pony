@@ -8,8 +8,7 @@ class Geometry
   One unit of geometry. Hash needs to uniquely represent the buffered content in order to allow for reuse of geometric
   data if nothing has changed
   """
-  var vertices:AlignedArray[F32] = AlignedArray[F32]
-  var indices:AlignedArray[U32] = AlignedArray[U32]
+  var vertices:FloatAlignedArray = FloatAlignedArray
   var bounds:R4 = R4fun.zero()
   var matrix:M4 = M4fun.id()
   

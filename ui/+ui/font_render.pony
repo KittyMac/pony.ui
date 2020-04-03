@@ -193,14 +193,10 @@ class FontRender
     needs_rendered = false
     
     let vertices = geom.vertices
-    let indices = geom.indices
     
     // 4 vertices for each character, x,y,z,u,t
     vertices.reserve(text.size() * 4 * 5)
     vertices.clear()
-  
-    indices.reserve(text.size() * 6)
-    indices.clear()
     
     glyphRenderData.reserve(text.size())
     glyphRenderData.clear()
@@ -219,7 +215,6 @@ class FontRender
     var pen:V2 = V2fun(bounds_xmin, bounds_ymin + fontSize)
         
     // measure out all lines of text (each character saved to glyphRenderData)
-    var idx:U32 = 0
     while start_index < end_index do
       
       if (pen._2 - advance_y) >= bounds_ymax then
@@ -294,20 +289,16 @@ class FontRender
       st_x_max = g.tx + (g.tw * w_mod)
       st_y_max = g.ty + (g.th * h_mod)
       
-      if (x_max > x_min) and (y_max > y_min) then
-        RenderPrimitive.buildVT(frameContext, vertices,   V3fun(x_min, y_min, 0.0),   V2fun(st_x_min, st_y_min) )
-        RenderPrimitive.buildVT(frameContext, vertices,   V3fun(x_max, y_min, 0.0),   V2fun(st_x_max, st_y_min) )
-        RenderPrimitive.buildVT(frameContext, vertices,   V3fun(x_max, y_max, 0.0),   V2fun(st_x_max, st_y_max) )
-        RenderPrimitive.buildVT(frameContext, vertices,   V3fun(x_min, y_max, 0.0),   V2fun(st_x_min, st_y_max) )
-      
-        indices.push(idx + 0)
-        indices.push(idx + 1)
-        indices.push(idx + 2)
-        indices.push(idx + 2)
-        indices.push(idx + 3)
-        indices.push(idx + 0)
-  
-        idx = idx + 4
+      if (x_max > x_min) and (y_max > y_min) then        
+        RenderPrimitive.quadVT(frameContext,    vertices,   
+                                V3fun(x_min,  y_min, 0.0), 
+                                V3fun(x_max,  y_min, 0.0),
+                                V3fun(x_max,  y_max, 0.0),
+                                V3fun(x_min,  y_max, 0.0),
+                                V2fun(st_x_min, st_y_min),
+                                V2fun(st_x_max, st_y_min),
+                                V2fun(st_x_max, st_y_max),
+                                V2fun(st_x_min, st_y_max) )                                
       end
     end
     

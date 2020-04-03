@@ -17,9 +17,6 @@ void RenderEngine_render(HALRenderContext * ctx,
                          uint64_t frameNumber,
                          uint64_t renderNumber,
                          uint32_t shaderType,
-                         uint32_t num_indices,
-                         uint32_t * indices,
-                         uint32_t size_indices_array,
                          uint32_t num_vertices,
                          void * vertices,
                          uint32_t size_vertices_array,
@@ -32,9 +29,6 @@ void RenderEngine_render(HALRenderContext * ctx,
     UNUSED(frameNumber);
     UNUSED(renderNumber);
     UNUSED(shaderType);
-    UNUSED(num_indices);
-    UNUSED(indices);
-    UNUSED(size_indices_array);
     UNUSED(num_vertices);
     UNUSED(vertices);
     UNUSED(size_vertices_array);

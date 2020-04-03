@@ -37,4 +37,4 @@ actor Label is (Viewable & Colorable)
 	fun ref render(frameContext:FrameContext val, bounds:R4) =>
     fontRender.fontColor = _color
     let geom = fontRender.geometry(frameContext, value, bounds)
-    RenderPrimitive.renderCachedGeometry(frameContext, 0, ShaderType.sdf(), geom.vertices, geom.indices, fontRender.fontColor, fontRender.font.name.cpointer())
+    RenderPrimitive.renderCachedGeometry(frameContext, 0, ShaderType.sdf(), geom.vertices, fontRender.fontColor, fontRender.font.name.cpointer())

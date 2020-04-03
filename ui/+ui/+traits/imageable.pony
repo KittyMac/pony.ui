@@ -68,14 +68,11 @@ trait Imageable is (Viewable & Colorable)
     
     let geom = bufferedGeometry.next()
     let vertices = geom.vertices
-    let indices = geom.indices
     
     if geom.check(frameContext, bounds) == false then
       
       vertices.reserve(4 * 9)
       vertices.clear()
-      indices.reserve(6)
-      indices.clear()
             
       var image_width:F32 = 0
       var image_height:F32 = 0
@@ -124,17 +121,21 @@ trait Imageable is (Viewable & Colorable)
       else
         None
       end
-          
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_min,  y_min, 0.0), _color,   V2fun(s_min, t_min) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_max,  y_min, 0.0), _color,   V2fun(s_max, t_min) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_max,  y_max, 0.0), _color,   V2fun(s_max, t_max) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_min,  y_max, 0.0), _color,   V2fun(s_min, t_max) )
-    
-      indices.push(0); indices.push(1); indices.push(2)
-      indices.push(2); indices.push(3); indices.push(0)
+      
+      RenderPrimitive.quadVCT(frameContext,    vertices,   
+                              V3fun(x_min,  y_min, 0.0), 
+                              V3fun(x_max,  y_min, 0.0),
+                              V3fun(x_max,  y_max, 0.0),
+                              V3fun(x_min,  y_max, 0.0),
+                              _color,   
+                              V2fun(s_min, t_min),
+                              V2fun(s_max, t_min),
+                              V2fun(s_max, t_max),
+                              V2fun(s_min, t_max) )
+                              
     end
     
-    RenderPrimitive.renderCachedGeometry(frameContext, 0, ShaderType.textured(), vertices, indices, RGBA.white(), _textureName.cpointer())
+    RenderPrimitive.renderCachedGeometry(frameContext, 0, ShaderType.textured(), vertices, RGBA.white(), _textureName.cpointer())
 
 
   fun ref imageable_render_stretch(frameContext:FrameContext val, bounds:R4) =>
@@ -142,12 +143,9 @@ trait Imageable is (Viewable & Colorable)
     // quads in order to draw one stretched image
     let geom = bufferedGeometry.next()
     let vertices = geom.vertices
-    let indices = geom.indices
 
     vertices.reserve(4 * 9 * 9)
     vertices.clear()
-    indices.reserve(6 * 9)
-    indices.clear()
     
     var image_width:F32 = 0
     var image_height:F32 = 0
@@ -167,9 +165,7 @@ trait Imageable is (Viewable & Colorable)
     var s_max:F32 = 1.0
     var t_min:F32 = 0.0
     var t_max:F32 = 1.0
-    
-    var i:U32 = 0
-        
+            
     // stretch_insets is (top, left, bottom, right)
     var row:USize = 0
     while row < 3 do
@@ -195,14 +191,17 @@ trait Imageable is (Viewable & Colorable)
       x_max = x + stretch_insets._2
       s_min = 0
       s_max = stretch_insets._2 / image_width
-    
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_min,  y_min, 0.0), _color,   V2fun(s_min, t_min) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_max,  y_min, 0.0), _color,   V2fun(s_max, t_min) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_max,  y_max, 0.0), _color,   V2fun(s_max, t_max) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_min,  y_max, 0.0), _color,   V2fun(s_min, t_max) )
-
-      indices.push(i + 0); indices.push(i + 1); indices.push(i + 2); indices.push(i + 2); indices.push(i + 3); indices.push(i + 0)
-      i = i + 4
+      
+      RenderPrimitive.quadVCT(frameContext,    vertices,   
+                              V3fun(x_min,  y_min, 0.0), 
+                              V3fun(x_max,  y_min, 0.0),
+                              V3fun(x_max,  y_max, 0.0),
+                              V3fun(x_min,  y_max, 0.0),
+                              _color,
+                              V2fun(s_min, t_min),
+                              V2fun(s_max, t_min),
+                              V2fun(s_max, t_max),
+                              V2fun(s_min, t_max) )
     
       // center
       x_min = x_max
@@ -210,13 +209,16 @@ trait Imageable is (Viewable & Colorable)
       s_min = s_max
       s_max = (image_width - stretch_insets._4) / image_width
     
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_min,  y_min, 0.0), _color,   V2fun(s_min, t_min) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_max,  y_min, 0.0), _color,   V2fun(s_max, t_min) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_max,  y_max, 0.0), _color,   V2fun(s_max, t_max) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_min,  y_max, 0.0), _color,   V2fun(s_min, t_max) )
-
-      indices.push(i + 0); indices.push(i + 1); indices.push(i + 2); indices.push(i + 2); indices.push(i + 3); indices.push(i + 0)
-      i = i + 4      
+      RenderPrimitive.quadVCT(frameContext,    vertices,   
+                              V3fun(x_min,  y_min, 0.0), 
+                              V3fun(x_max,  y_min, 0.0),
+                              V3fun(x_max,  y_max, 0.0),
+                              V3fun(x_min,  y_max, 0.0),
+                              _color,
+                              V2fun(s_min, t_min),
+                              V2fun(s_max, t_min),
+                              V2fun(s_max, t_max),
+                              V2fun(s_min, t_max) )
     
       // right
       x_min = x_max
@@ -224,14 +226,17 @@ trait Imageable is (Viewable & Colorable)
       s_min = s_max
       s_max = 1.0
     
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_min,  y_min, 0.0), _color,   V2fun(s_min, t_min) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_max,  y_min, 0.0), _color,   V2fun(s_max, t_min) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_max,  y_max, 0.0), _color,   V2fun(s_max, t_max) )
-      RenderPrimitive.buildVCT(frameContext,    vertices,   V3fun(x_min,  y_max, 0.0), _color,   V2fun(s_min, t_max) )
-
-      indices.push(i + 0); indices.push(i + 1); indices.push(i + 2); indices.push(i + 2); indices.push(i + 3); indices.push(i + 0)
-      i = i + 4
+      RenderPrimitive.quadVCT(frameContext,    vertices,   
+                              V3fun(x_min,  y_min, 0.0), 
+                              V3fun(x_max,  y_min, 0.0),
+                              V3fun(x_max,  y_max, 0.0),
+                              V3fun(x_min,  y_max, 0.0),
+                              _color,
+                              V2fun(s_min, t_min),
+                              V2fun(s_max, t_min),
+                              V2fun(s_max, t_max),
+                              V2fun(s_min, t_max) )
     end
     
-    RenderPrimitive.renderCachedGeometry(frameContext, 0, ShaderType.textured(), vertices, indices, RGBA.white(), _textureName.cpointer())
+    RenderPrimitive.renderCachedGeometry(frameContext, 0, ShaderType.textured(), vertices, RGBA.white(), _textureName.cpointer())
     

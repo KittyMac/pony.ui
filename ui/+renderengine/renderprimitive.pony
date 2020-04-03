@@ -7,9 +7,6 @@ use @RenderEngine_render[None]( ctx:RenderContextRef tag,
                         frameNumber:U64, 
                        renderNumber:U64, 
                          shaderType:U32,
-                         numIndices:U32,
-                            indices:UnsafePointer[U32] tag,
-                 size_indices_array:U32,
                         numVertices:U32,
                            vertices:UnsafePointer[F32] tag, 
                 size_vertices_array:U32, 
@@ -35,18 +32,44 @@ primitive RenderPrimitive
   """
   Rendering actors can call this concurrently safely to submit geometry to the platform rendering engine
   """
-  fun tag buildVCT(frameContext:FrameContext val, vertices:AlignedArray[F32], v:V3, c:RGBA, st:V2) =>
+  fun tag transform(frameContext:FrameContext val, v:V3):V3 =>
+    M4fun.mul_v3_point_3x4(frameContext.matrix, v)
+  
+  fun tag quadVCT(frameContext:FrameContext val, vertices:FloatAlignedArray, p0:V3, p1:V3, p2:V3, p3:V3, c:RGBA, st0:V2, st1:V2, st2:V2, st3:V2) =>
+    let v0 = M4fun.mul_v3_point_3x4(frameContext.matrix, p0)
+    let v1 = M4fun.mul_v3_point_3x4(frameContext.matrix, p1)
+    let v2 = M4fun.mul_v3_point_3x4(frameContext.matrix, p2)
+    let v3 = M4fun.mul_v3_point_3x4(frameContext.matrix, p3)
+    vertices.pushQuadVCT(v0, v1, v2, v3, c.r, c.g, c.b, c.a, st0, st1, st2, st3) 
+   
+  
+  fun tag quadVC(frameContext:FrameContext val, vertices:FloatAlignedArray, p0:V3, p1:V3, p2:V3, p3:V3, c:RGBA) =>
+    let v0 = M4fun.mul_v3_point_3x4(frameContext.matrix, p0)
+    let v1 = M4fun.mul_v3_point_3x4(frameContext.matrix, p1)
+    let v2 = M4fun.mul_v3_point_3x4(frameContext.matrix, p2)
+    let v3 = M4fun.mul_v3_point_3x4(frameContext.matrix, p3)
+    vertices.pushQuadVC(v0, v1, v2, v3, c.r, c.g, c.b, c.a) 
+  
+  fun tag quadVT(frameContext:FrameContext val, vertices:FloatAlignedArray, p0:V3, p1:V3, p2:V3, p3:V3, st0:V2, st1:V2, st2:V2, st3:V2) =>
+    let v0 = M4fun.mul_v3_point_3x4(frameContext.matrix, p0)
+    let v1 = M4fun.mul_v3_point_3x4(frameContext.matrix, p1)
+    let v2 = M4fun.mul_v3_point_3x4(frameContext.matrix, p2)
+    let v3 = M4fun.mul_v3_point_3x4(frameContext.matrix, p3)
+    vertices.pushQuadVT(v0, v1, v2, v3, st0, st1, st2, st3) 
+    
+  
+  fun tag buildVCT(frameContext:FrameContext val, vertices:FloatAlignedArray, v:V3, c:RGBA, st:V2) =>
     let p = M4fun.mul_v3_point_3x4(frameContext.matrix, v)
     vertices.push(p._1); vertices.push(p._2); vertices.push(p._3)
     vertices.push(c.r); vertices.push(c.g); vertices.push(c.b); vertices.push(c.a)
     vertices.push(st._1); vertices.push(st._2)
   
-  fun tag buildVC(frameContext:FrameContext val, vertices:AlignedArray[F32], v:V3, c:RGBA) =>
+  fun tag buildVC(frameContext:FrameContext val, vertices:FloatAlignedArray, v:V3, c:RGBA) =>
     let p = M4fun.mul_v3_point_3x4(frameContext.matrix, v)
     vertices.push(p._1); vertices.push(p._2); vertices.push(p._3)
     vertices.push(c.r); vertices.push(c.g); vertices.push(c.b); vertices.push(c.a)
     
-  fun tag buildVT(frameContext:FrameContext val, vertices:AlignedArray[F32], v:V3, st:V2) =>
+  fun tag buildVT(frameContext:FrameContext val, vertices:FloatAlignedArray, v:V3, st:V2) =>
     let p = M4fun.mul_v3_point_3x4(frameContext.matrix, v)
     vertices.push(p._1); vertices.push(p._2); vertices.push(p._3)
     vertices.push(st._1); vertices.push(st._2)
@@ -57,14 +80,11 @@ primitive RenderPrimitive
   fun tag startFinished(frameContext:FrameContext val) =>
     frameContext.engine.startFinished()
   
-  fun tag renderCachedGeometry(frameContext:FrameContext val, partNum:U64, shaderType:U32, vertices:AlignedArray[F32], indices:AlignedArray[U32], gc:RGBA val, t:Pointer[U8] tag) =>
+  fun tag renderCachedGeometry(frameContext:FrameContext val, partNum:U64, shaderType:U32, vertices:FloatAlignedArray, gc:RGBA val, t:Pointer[U8] tag) =>
     @RenderEngine_render( frameContext.renderContext,
                           frameContext.frameNumber,
                           (frameContext.renderNumber * 100) + partNum,
                           shaderType, 
-                          indices.size().u32(), 
-                          indices.cpointer(), 
-                          indices.reserved().u32(),
                           vertices.size().u32(), 
                           vertices.cpointer(),
                           vertices.reserved().u32(),
