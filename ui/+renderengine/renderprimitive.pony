@@ -9,9 +9,10 @@ use @RenderEngine_render[None]( ctx:RenderContextRef tag,
                          shaderType:U32,
                          numIndices:U32,
                             indices:UnsafePointer[U32] tag,
+                 size_indices_array:U32,
                         numVertices:U32,
                            vertices:UnsafePointer[F32] tag, 
-                         freeMemory:Bool, 
+                size_vertices_array:U32, 
                             globalR:F32, 
                             globalG:F32, 
                             globalB:F32, 
@@ -56,74 +57,6 @@ primitive RenderPrimitive
   fun tag startFinished(frameContext:FrameContext val) =>
     frameContext.engine.startFinished()
   
-  fun tag renderColoredQuad(frameContext:FrameContext val, partNum:U64, b:R4, c:RGBA, gc:RGBA) =>
-    let x_min = R4fun.x_min(b)
-    let y_min = R4fun.y_min(b)
-    let x_max = R4fun.x_max(b)
-    let y_max = R4fun.y_max(b)
-      
-    var vertices:AlignedArray[F32] = AlignedArray[F32](28)
-    buildVC(frameContext, vertices,   V3fun(x_min,  y_min,  0.0), c)
-    buildVC(frameContext, vertices,   V3fun(x_max,  y_min,  0.0), c)
-    buildVC(frameContext, vertices,   V3fun(x_max,  y_max,  0.0), c)
-    buildVC(frameContext, vertices,   V3fun(x_min,  y_max,  0.0), c)
-      
-    var indices:AlignedArray[U32] = AlignedArray[U32](6)
-    indices.push(0)
-    indices.push(1)
-    indices.push(2)
-    indices.push(2)
-    indices.push(3)
-    indices.push(0)
-        
-    @RenderEngine_render( frameContext.renderContext, 
-                          frameContext.frameNumber, 
-                          (frameContext.renderNumber * 100) + partNum,
-                          ShaderType.flat(), 
-                          indices.size().u32(), 
-                          indices.cpointer(), 
-                          vertices.size().u32(), 
-                          vertices.cpointer(),
-                          true,
-                          gc.r, gc.g, gc.b, gc.a,
-                          Pointer[U8])
-    vertices.forget()
-    indices.forget()
-    
-  fun tag renderColoredTexturedQuad(frameContext:FrameContext val, partNum:U64, b:R4, c:RGBA, gc:RGBA, t:Pointer[U8] tag) =>
-    let x_min = R4fun.x_min(b)
-    let y_min = R4fun.y_min(b)
-    let x_max = R4fun.x_max(b)
-    let y_max = R4fun.y_max(b)
-    
-    var vertices:AlignedArray[F32] = AlignedArray[F32](28)
-    buildVCT(frameContext, vertices,   V3fun(x_min,  y_min, 0.0), c,   V2fun(0.0, 0.0) )
-    buildVCT(frameContext, vertices,   V3fun(x_max,  y_min, 0.0), c,   V2fun(1.0, 0.0) )
-    buildVCT(frameContext, vertices,   V3fun(x_max,  y_max, 0.0), c,   V2fun(1.0, 1.0) )
-    buildVCT(frameContext, vertices,   V3fun(x_min,  y_max, 0.0), c,   V2fun(0.0, 1.0) )
-
-    var indices:AlignedArray[U32] = AlignedArray[U32](6)
-    indices.push(0)
-    indices.push(1)
-    indices.push(2)
-    indices.push(2)
-    indices.push(3)
-    indices.push(0)
-
-    @RenderEngine_render( frameContext.renderContext,
-                          frameContext.frameNumber,
-                          (frameContext.renderNumber * 100) + partNum,
-                          ShaderType.textured(), 
-                          indices.size().u32(), 
-                          indices.cpointer(), 
-                          vertices.size().u32(), 
-                          vertices.cpointer(),
-                          true,
-                          gc.r, gc.g, gc.b, gc.a,
-                          t)
-    vertices.forget()
-    indices.forget()
-  
   fun tag renderCachedGeometry(frameContext:FrameContext val, partNum:U64, shaderType:U32, vertices:AlignedArray[F32], indices:AlignedArray[U32], gc:RGBA val, t:Pointer[U8] tag) =>
     @RenderEngine_render( frameContext.renderContext,
                           frameContext.frameNumber,
@@ -131,9 +64,10 @@ primitive RenderPrimitive
                           shaderType, 
                           indices.size().u32(), 
                           indices.cpointer(), 
+                          indices.reserved().u32(),
                           vertices.size().u32(), 
                           vertices.cpointer(),
-                          false,
+                          vertices.reserved().u32(),
                           gc.r, gc.g, gc.b, gc.a,
                           t)
     

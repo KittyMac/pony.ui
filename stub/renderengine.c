@@ -13,15 +13,16 @@ void * RenderEngine_init(void * ponyRenderEngine) {
   return (void *)1;
 }
 
-void RenderEngine_render(void * ctx,
+void RenderEngine_render(HALRenderContext * ctx,
                          uint64_t frameNumber,
                          uint64_t renderNumber,
                          uint32_t shaderType,
                          uint32_t num_indices,
                          uint32_t * indices,
+                         uint32_t size_indices_array,
                          uint32_t num_vertices,
                          void * vertices,
-                         char freeMemory,
+                         uint32_t size_vertices_array,
                          float globalR,
                          float globalG,
                          float globalB,
@@ -33,9 +34,10 @@ void RenderEngine_render(void * ctx,
     UNUSED(shaderType);
     UNUSED(num_indices);
     UNUSED(indices);
+    UNUSED(size_indices_array);
     UNUSED(num_vertices);
     UNUSED(vertices);
-    UNUSED(freeMemory);
+    UNUSED(size_vertices_array);
     UNUSED(globalR);
     UNUSED(globalG);
     UNUSED(globalB);

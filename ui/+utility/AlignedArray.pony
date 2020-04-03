@@ -13,7 +13,7 @@ class AlignedArray[A] is Seq[A]
   var _ptr: UnsafePointer[A] ref = UnsafePointer[A]
   
   fun _final() =>
-    @RenderEngine_free[None](_ptr)
+    @RenderEngine_release[None](_ptr, _alloc)
     
   new create(len: USize = 0) =>
     """
@@ -28,19 +28,13 @@ class AlignedArray[A] is Seq[A]
       _alloc = 0
       _ptr = UnsafePointer[A]
     end
-  
-  fun ref forget() =>
-    """
-    We have passed the memory over FFI and relinquish control over it.  Replace it with a new buffer of the same size
-    """
-    _ptr = @RenderEngine_malloc[UnsafePointer[A]](addressof _alloc)
-  
+    
   fun ref free() =>
     """
     For completeness, you can manually free the non-Pony memory using this method.
     """
     if _alloc > 0 then
-      @RenderEngine_free[None](_ptr)
+      @RenderEngine_release[None](_ptr, _alloc)
     end
     _alloc = 0
     _ptr = UnsafePointer[A]
@@ -207,6 +201,7 @@ class AlignedArray[A] is Seq[A]
     
     if _alloc < alignedLen then
       let old_ptr = _ptr
+      let old_alloc = _alloc
       
       _alloc = len
       _ptr = @RenderEngine_malloc[UnsafePointer[A]](addressof _alloc)
@@ -215,7 +210,7 @@ class AlignedArray[A] is Seq[A]
         old_ptr.copy_to(_ptr, _size)
       end
       
-      @RenderEngine_free[None](old_ptr)
+      @RenderEngine_release[None](old_ptr, old_alloc)
     end
   
   fun ref clear() =>
@@ -236,6 +231,12 @@ class AlignedArray[A] is Seq[A]
     The number of elements in the array.
     """
     _size
+  
+  fun reserved(): USize =>
+    """
+    The number of elements in the array.
+    """
+    _alloc
   
   fun cpointer(offset: USize = 0): UnsafePointer[A] tag =>
     """
