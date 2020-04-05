@@ -144,19 +144,7 @@ actor@ RenderEngine
   // update the size of my node to match the window, then relayout everything
     node.>width(w).>height(h)
     layout()
-  
-  fun ref increaseCPUThrottleValue() =>
-    ifdef ios then
-      variable_cpu_throttle = (variable_cpu_throttle * 2).min(50)
-    else
-      variable_cpu_throttle = (variable_cpu_throttle * 2).min(1200)
-    end
-    @ponyint_cpu_throttle(variable_cpu_throttle)
-  
-  fun ref decreaseCPUThrottleValue() =>
-    variable_cpu_throttle = (variable_cpu_throttle / 2).max(5)
-    @ponyint_cpu_throttle(variable_cpu_throttle)
-    
+      
   fun ref layout() =>
     layoutNeeded = false
     renderNeeded = true
@@ -183,17 +171,12 @@ actor@ RenderEngine
         
     if renderNeeded and (waitingOnViewsToRender == 0) then
       renderNeeded = false
-      
-      increaseCPUThrottleValue()
-      
+            
       frameNumber = frameNumber + 1
       
       let frameContext = FrameContext(this, renderContext, node.id(), frameNumber, 0, M4fun.id())
       waitingOnViewsToRender = node.render(frameContext)
-      
     else
-      decreaseCPUThrottleValue()
-      
       @RenderEngine_render(renderContext, frameNumber, U64.max_value(), ShaderType.finished(), 0, UnsafePointer[F32], 0, 1.0, 1.0, 1.0, 1.0, Pointer[U8])
     end
   

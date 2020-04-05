@@ -13,7 +13,7 @@ void * RenderEngine_init(void * ponyRenderEngine) {
   return (void *)1;
 }
 
-void RenderEngine_render(HALRenderContext * ctx,
+void RenderEngine_render(void * ctx,
                          uint64_t frameNumber,
                          uint64_t renderNumber,
                          uint32_t shaderType,
