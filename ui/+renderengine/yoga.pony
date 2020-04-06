@@ -16,7 +16,7 @@ class YogaNode
   var last_matrix:M4 = M4fun.id()
   
   fun _final() =>
-    @printf("_final called on yoga node [%d]\n".cstring(), node)
+    //@printf("_final called on yoga node [%d]\n".cstring(), node)
     @YGNodeFree(node)
   
 	new create() =>

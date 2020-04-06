@@ -295,10 +295,10 @@ class FontRender
                                 V3fun(x_max,  y_min, 0.0),
                                 V3fun(x_max,  y_max, 0.0),
                                 V3fun(x_min,  y_max, 0.0),
-                                V2fun(st_x_min, st_y_min),
-                                V2fun(st_x_max, st_y_min),
-                                V2fun(st_x_max, st_y_max),
-                                V2fun(st_x_min, st_y_max) )                                
+                                V2fun(st_x_min, 1.0 - st_y_min),
+                                V2fun(st_x_max, 1.0 - st_y_min),
+                                V2fun(st_x_max, 1.0 - st_y_max),
+                                V2fun(st_x_min, 1.0 - st_y_max) )                                
       end
     end
     
