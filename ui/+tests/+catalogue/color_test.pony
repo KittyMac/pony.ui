@@ -1,12 +1,13 @@
+use "yoga"
 
 actor ColorTest is Controllerable
   
 	fun ref mainNode():YogaNode iso^ =>    
     recover iso 
-      YogaNode.>alignItems(_YgalignEnum.flexstart())
-              .>flexDirection(_YgflexDirectionEnum.row())
-              .>flexWrap(_YgwrapEnum.wrap())
-              .>padding(_YgedgeEnum.all(), 40)
+      YogaNode.>alignItems(YGAlign.flexstart)
+              .>flexDirection(YGFlexDirection.row)
+              .>flexWrap(YGWrap.wrap)
+              .>padding(YGEdge.all, 40)
               .>view( Color.>color(RGBA(0.98,0.98,0.98,1)) )
               .>addChildren( [
                                                       

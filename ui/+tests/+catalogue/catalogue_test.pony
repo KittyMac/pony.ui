@@ -1,4 +1,5 @@
 use "utility"
+use "yoga"
 
 primitive SwitchToColors is Action
 primitive SwitchToButtons is Action
@@ -16,8 +17,8 @@ actor Catalog is Controllerable
   
   fun ref mainNode():YogaNode iso^ =>
     let main = recover iso
-      YogaNode.>alignItems(_YgalignEnum.flexstart())
-              .>flexDirection(_YgflexDirectionEnum.row())
+      YogaNode.>alignItems(YGAlign.flexstart)
+              .>flexDirection(YGFlexDirection.row)
               .>view( Color.>color(RGBA(0.98,0.98,0.98,1)) )
               .>addChildren( [
         
@@ -51,8 +52,8 @@ actor Catalog is Controllerable
   fun tag menuButton(title:String, font':Font, evt:CatalogAction):YogaNode =>
     YogaNode.>width(204)
             .>height(46)
-            .>padding(_YgedgeEnum.all(), 6)
-            .>padding(_YgedgeEnum.left(), 12)
+            .>padding(YGEdge.all, 6)
+            .>padding(YGEdge.left, 12)
             .>view( ImageButton( "white", "white").>pressedColor(RGBA.u32( 0x98cbf3ff ))
                                                   .>color(RGBA.u32( 0xffffff00 ))
                                                   .>action(this, evt) )

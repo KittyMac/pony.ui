@@ -8,7 +8,7 @@ native_cc=clang
 native_ar=ar
 
 all: stub-native copy-libs
-	corral run -- ponyc --extfun -p $(lib_dir) -o ./build/ ./ui
+	corral exec -- ponyc --extfun -p $(lib_dir) -o ./build/ ./ui
 	./build/ui
 
 test: stub-native copy-libs

@@ -1,5 +1,6 @@
 use "linal"
 use "stringext"
+use "yoga"
 
 actor Button is Buttonable
   """
@@ -32,9 +33,9 @@ actor Button is Buttonable
           var childIdx:USize = 0
           for child in node.children.values() do
             if showChildIdx == childIdx then
-              child.>display(_YgdisplayEnum.flex())
+              child.>display(YGDisplay.flex)
             else
-              child.>display(_YgdisplayEnum.none())
+              child.>display(YGDisplay.none)
             end
             childIdx = childIdx + 1
           end

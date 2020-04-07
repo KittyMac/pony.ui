@@ -7,7 +7,7 @@ use "promises"
 type YogaNodeID is USize
 
 class YogaNode
-  var node:_YgnodeRef tag
+  var node:YGNodeRef tag
   var _name:String val
   var _view:(Viewable|None)
   
@@ -49,10 +49,10 @@ class YogaNode
   fun ref layout() =>
     // Before we can calculate the layout, we need to see if any of our children sizeToFit their content. If we do, we need
     // to have them set the size on the appropriate yoga node
-    @YGNodeCalculateLayout(node, @YGNodeStyleGetWidth(node), @YGNodeStyleGetHeight(node), _YgdirectionEnum.ltr())
+    @YGNodeCalculateLayout(node, @YGNodeStyleGetWidth(node), @YGNodeStyleGetHeight(node), YGDirection.ltr)
   
   fun print() =>
-    @YGNodePrint(node, _YgprintOptionsEnum.layout() or _YgprintOptionsEnum.style() or _YgprintOptionsEnum.children())
+    @YGNodePrint(node, YGPrintOptions.layout or YGPrintOptions.style or YGPrintOptions.children)
     @printf("\n".cstring())
   
   fun ref getNodeByName(nodeName:String val):(YogaNode|None) =>
@@ -242,218 +242,234 @@ class YogaNode
   
   /*
 
-primitive _YgalignEnum
-  fun auto():U32 => 0x0
-  fun flexstart():U32 => 0x1
-  fun center():U32 => 0x2
-  fun flexend():U32 => 0x3
-  fun stretch():U32 => 0x4
-  fun baseline():U32 => 0x5
-  fun spacebetween():U32 => 0x6
-  fun spacearound():U32 => 0x7
-primitive _YgdimensionEnum
-  fun width():U32 => 0x0
-  fun height():U32 => 0x1
-primitive _YgdirectionEnum
-  fun inherit():U32 => 0x0
-  fun ltr():U32 => 0x1
-  fun rtl():U32 => 0x2
-primitive _YgdisplayEnum
-  fun flex():U32 => 0x0
-  fun none():U32 => 0x1
-primitive _YgedgeEnum
-  fun left():U32 => 0x0
-  fun top():U32 => 0x1
-  fun right():U32 => 0x2
-  fun bottom():U32 => 0x3
-  fun start():U32 => 0x4
-  fun end_pony():U32 => 0x5
-  fun horizontal():U32 => 0x6
-  fun vertical():U32 => 0x7
-  fun all():U32 => 0x8
-primitive _YgflexDirectionEnum
-  fun column():U32 => 0x0
-  fun columnreverse():U32 => 0x1
-  fun row():U32 => 0x2
-  fun rowreverse():U32 => 0x3
-primitive _YgjustifyEnum
-  fun flexstart():U32 => 0x0
-  fun center():U32 => 0x1
-  fun flexend():U32 => 0x2
-  fun spacebetween():U32 => 0x3
-  fun spacearound():U32 => 0x4
-  fun spaceevenly():U32 => 0x5
-primitive _YglogLevelEnum
-  fun error_pony():U32 => 0x0
-  fun warn():U32 => 0x1
-  fun info():U32 => 0x2
-  fun debug():U32 => 0x3
-  fun verbose():U32 => 0x4
-  fun fatal():U32 => 0x5
-primitive _YgmeasureModeEnum
-  fun undefined():U32 => 0x0
-  fun exactly():U32 => 0x1
-  fun atmost():U32 => 0x2
-primitive _YgnodeTypeEnum
-  fun default():U32 => 0x0
-  fun text():U32 => 0x1
-primitive _YgoverflowEnum
-  fun visible():U32 => 0x0
-  fun hidden():U32 => 0x1
-  fun scroll():U32 => 0x2
-primitive _YgpositionTypeEnum
-  fun relative():U32 => 0x0
-  fun absolute():U32 => 0x1
-primitive _YgprintOptionsEnum
-  fun layout():U32 => 0x1
-  fun style():U32 => 0x2
-  fun children():U32 => 0x4
-primitive _YgunitEnum
-  fun undefined():U32 => 0x0
-  fun point():U32 => 0x1
-  fun percent():U32 => 0x2
-  fun auto():U32 => 0x3
-primitive _YgwrapEnum
-  fun nowrap():U32 => 0x0
-  fun wrap():U32 => 0x1
-  fun wrapreverse():U32 => 0x2
-  */
+primitive YGAlign
+  let auto:U32 = 0x0
+  let flexstart:U32 = 0x1
+  let center:U32 = 0x2
+  let flexend:U32 = 0x3
+  let stretch:U32 = 0x4
+  let baseline:U32 = 0x5
+  let spacebetween:U32 = 0x6
+  let spacearound:U32 = 0x7
+primitive YGDimension
+  let width:U32 = 0x0
+  let height:U32 = 0x1
+primitive YGDirection
+  let inherit:U32 = 0x0
+  let ltr:U32 = 0x1
+  let rtl:U32 = 0x2
+primitive YGDisplay
+  let flex:U32 = 0x0
+  let none:U32 = 0x1
+primitive YGEdge
+  let left:U32 = 0x0
+  let top:U32 = 0x1
+  let right:U32 = 0x2
+  let bottom:U32 = 0x3
+  let start:U32 = 0x4
+  let end_pony:U32 = 0x5
+  let horizontal:U32 = 0x6
+  let vertical:U32 = 0x7
+  let all:U32 = 0x8
+primitive YGFlexDirection
+  let column:U32 = 0x0
+  let columnreverse:U32 = 0x1
+  let row:U32 = 0x2
+  let rowreverse:U32 = 0x3
+primitive YGJustify
+  let flexstart:U32 = 0x0
+  let center:U32 = 0x1
+  let flexend:U32 = 0x2
+  let spacebetween:U32 = 0x3
+  let spacearound:U32 = 0x4
+  let spaceevenly:U32 = 0x5
+primitive YGLogLevel
+  let error_pony:U32 = 0x0
+  let warn:U32 = 0x1
+  let info:U32 = 0x2
+  let debug:U32 = 0x3
+  let verbose:U32 = 0x4
+  let fatal:U32 = 0x5
+primitive YGMeasureMode
+  let undefined:U32 = 0x0
+  let exactly:U32 = 0x1
+  let atmost:U32 = 0x2
+primitive YGNodeType
+  let default:U32 = 0x0
+  let text:U32 = 0x1
+primitive YGOverflow
+  let visible:U32 = 0x0
+  let hidden:U32 = 0x1
+  let scroll:U32 = 0x2
+primitive YGPositionType
+  let relative:U32 = 0x0
+  let absolute:U32 = 0x1
+primitive YGPrintOptions
+  let layout:U32 = 0x1
+  let style:U32 = 0x2
+  let children:U32 = 0x4
+primitive YGUnit
+  let undefined:U32 = 0x0
+  let point:U32 = 0x1
+  let percent:U32 = 0x2
+  let auto:U32 = 0x3
+primitive YGWrap
+  let nowrap:U32 = 0x0
+  let wrap:U32 = 0x1
+  let wrapreverse:U32 = 0x2
+=============================================================================
+========================== autogenerated pony code ==========================
+// Transpiled from /Volumes/Development/Development/pony/pony.yoga/yoga/+headers/Yoga.h
 
-/*
-use @YGNodeNew[Pointer[_Ygnode]]()
-use @YGNodeNewWithConfig[Pointer[_Ygnode]](config:Pointer[_Ygconfig] tag)
-use @YGNodeClone[Pointer[_Ygnode]](node:Pointer[_Ygnode] tag)
-use @YGNodeFree[None](node:Pointer[_Ygnode] tag)
-use @YGNodeFreeRecursiveWithCleanupFunc[None](node:Pointer[_Ygnode] tag, cleanup:Pointer[None] tag)
-use @YGNodeFreeRecursive[None](node:Pointer[_Ygnode] tag)
-use @YGNodeReset[None](node:Pointer[_Ygnode] tag)
-use @YGNodeInsertChild[None](node:Pointer[_Ygnode] tag, child:Pointer[_Ygnode] tag, index:U64)
-use @YGNodeSwapChild[None](node:Pointer[_Ygnode] tag, child:Pointer[_Ygnode] tag, index:U64)
-use @YGNodeRemoveChild[None](node:Pointer[_Ygnode] tag, child:Pointer[_Ygnode] tag)
-use @YGNodeRemoveAllChildren[None](node:Pointer[_Ygnode] tag)
-use @YGNodeGetChild[Pointer[_Ygnode]](node:Pointer[_Ygnode] tag, index:U64)
-use @YGNodeGetOwner[Pointer[_Ygnode]](node:Pointer[_Ygnode] tag)
-use @YGNodeGetParent[Pointer[_Ygnode]](node:Pointer[_Ygnode] tag)
-use @YGNodeGetChildCount[U64](node:Pointer[_Ygnode] tag)
-use @YGNodeSetIsReferenceBaseline[None](node:Pointer[_Ygnode] tag, isReferenceBaseline:U32)
-use @YGNodeIsReferenceBaseline[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeCalculateLayout[None](node:Pointer[_Ygnode] tag, availableWidth:F32, availableHeight:F32, ownerDirection:U32)
-use @YGNodeMarkDirty[None](node:Pointer[_Ygnode] tag)
-use @YGNodeMarkDirtyAndPropogateToDescendants[None](node:Pointer[_Ygnode] tag)
-use @YGNodePrint[None](node:Pointer[_Ygnode] tag, options:U32)
+use @YGNodeNew[Pointer[YGNode]]()
+use @YGNodeNewWithConfig[Pointer[YGNode]](config:Pointer[YGConfig] tag)
+use @YGNodeClone[Pointer[YGNode]](node:Pointer[YGNode] tag)
+use @YGNodeFree[None](node:Pointer[YGNode] tag)
+use @YGNodeFreeRecursiveWithCleanupFunc[None](node:Pointer[YGNode] tag, cleanup:Pointer[None] tag)
+use @YGNodeFreeRecursive[None](node:Pointer[YGNode] tag)
+use @YGNodeReset[None](node:Pointer[YGNode] tag)
+use @YGNodeInsertChild[None](node:Pointer[YGNode] tag, child:Pointer[YGNode] tag, index:U64)
+use @YGNodeSwapChild[None](node:Pointer[YGNode] tag, child:Pointer[YGNode] tag, index:U64)
+use @YGNodeRemoveChild[None](node:Pointer[YGNode] tag, child:Pointer[YGNode] tag)
+use @YGNodeRemoveAllChildren[None](node:Pointer[YGNode] tag)
+use @YGNodeGetChild[Pointer[YGNode]](node:Pointer[YGNode] tag, index:U64)
+use @YGNodeGetOwner[Pointer[YGNode]](node:Pointer[YGNode] tag)
+use @YGNodeGetParent[Pointer[YGNode]](node:Pointer[YGNode] tag)
+use @YGNodeGetChildCount[U64](node:Pointer[YGNode] tag)
+use @YGNodeSetIsReferenceBaseline[None](node:Pointer[YGNode] tag, isReferenceBaseline:U32)
+use @YGNodeIsReferenceBaseline[U32](node:Pointer[YGNode] tag)
+use @YGNodeCalculateLayout[None](node:Pointer[YGNode] tag, availableWidth:F32, availableHeight:F32, ownerDirection:U32)
+use @YGNodeMarkDirty[None](node:Pointer[YGNode] tag)
+use @YGNodeMarkDirtyAndPropogateToDescendants[None](node:Pointer[YGNode] tag)
+use @YGNodePrint[None](node:Pointer[YGNode] tag, options:U32)
 use @YGFloatIsUndefined[U32](value:F32)
-use @YGNodeCanUseCachedMeasurement[U32](widthMode:U32, width:F32, heightMode:U32, height:F32, lastWidthMode:U32, lastWidth:F32, lastHeightMode:U32, lastHeight:F32, lastComputedWidth:F32, lastComputedHeight:F32, marginRow:F32, marginColumn:F32, config:Pointer[_Ygconfig] tag)
-use @YGNodeCopyStyle[None](dstNode:Pointer[_Ygnode] tag, srcNode:Pointer[_Ygnode] tag)
-use @YGNodeGetContext[Pointer[None]](node:Pointer[_Ygnode] tag)
-use @YGNodeSetContext[None](node:Pointer[_Ygnode] tag, context:Pointer[None] tag)
-use @YGConfigSetPrintTreeFlag[None](config:Pointer[_Ygconfig] tag, enabled:U32)
-use @YGNodeHasMeasureFunc[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeSetMeasureFunc[None](node:Pointer[_Ygnode] tag, measureFunc:U32)
-use @YGNodeHasBaselineFunc[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeSetBaselineFunc[None](node:Pointer[_Ygnode] tag, baselineFunc:Pointer[None] tag)
-use @YGNodeGetDirtiedFunc[Pointer[None]](node:Pointer[_Ygnode] tag)
-use @YGNodeSetDirtiedFunc[None](node:Pointer[_Ygnode] tag, dirtiedFunc:Pointer[None] tag)
-use @YGNodeSetPrintFunc[None](node:Pointer[_Ygnode] tag, printFunc:Pointer[None] tag)
-use @YGNodeGetHasNewLayout[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeSetHasNewLayout[None](node:Pointer[_Ygnode] tag, hasNewLayout:U32)
-use @YGNodeGetNodeType[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeSetNodeType[None](node:Pointer[_Ygnode] tag, nodeType:U32)
-use @YGNodeIsDirty[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetDidUseLegacyFlag[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetDirection[None](node:Pointer[_Ygnode] tag, direction:U32)
-use @YGNodeStyleGetDirection[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetFlexDirection[None](node:Pointer[_Ygnode] tag, flexDirection:U32)
-use @YGNodeStyleGetFlexDirection[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetJustifyContent[None](node:Pointer[_Ygnode] tag, justifyContent:U32)
-use @YGNodeStyleGetJustifyContent[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetAlignContent[None](node:Pointer[_Ygnode] tag, alignContent:U32)
-use @YGNodeStyleGetAlignContent[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetAlignItems[None](node:Pointer[_Ygnode] tag, alignItems:U32)
-use @YGNodeStyleGetAlignItems[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetAlignSelf[None](node:Pointer[_Ygnode] tag, alignSelf:U32)
-use @YGNodeStyleGetAlignSelf[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetPositionType[None](node:Pointer[_Ygnode] tag, positionType:U32)
-use @YGNodeStyleGetPositionType[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetFlexWrap[None](node:Pointer[_Ygnode] tag, flexWrap:U32)
-use @YGNodeStyleGetFlexWrap[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetOverflow[None](node:Pointer[_Ygnode] tag, overflow:U32)
-use @YGNodeStyleGetOverflow[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetDisplay[None](node:Pointer[_Ygnode] tag, display:U32)
-use @YGNodeStyleGetDisplay[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetFlex[None](node:Pointer[_Ygnode] tag, flex:F32)
-use @YGNodeStyleGetFlex[F32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetFlexGrow[None](node:Pointer[_Ygnode] tag, flexGrow:F32)
-use @YGNodeStyleGetFlexGrow[F32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetFlexShrink[None](node:Pointer[_Ygnode] tag, flexShrink:F32)
-use @YGNodeStyleGetFlexShrink[F32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetFlexBasis[None](node:Pointer[_Ygnode] tag, flexBasis:F32)
-use @YGNodeStyleSetFlexBasisPercent[None](node:Pointer[_Ygnode] tag, flexBasis:F32)
-use @YGNodeStyleSetFlexBasisAuto[None](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleGetFlexBasis[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetPosition[None](node:Pointer[_Ygnode] tag, edge:U32, position:F32)
-use @YGNodeStyleSetPositionPercent[None](node:Pointer[_Ygnode] tag, edge:U32, position:F32)
-use @YGNodeStyleGetPosition[U32](node:Pointer[_Ygnode] tag, edge:U32)
-use @YGNodeStyleSetMargin[None](node:Pointer[_Ygnode] tag, edge:U32, margin:F32)
-use @YGNodeStyleSetMarginPercent[None](node:Pointer[_Ygnode] tag, edge:U32, margin:F32)
-use @YGNodeStyleSetMarginAuto[None](node:Pointer[_Ygnode] tag, edge:U32)
-use @YGNodeStyleGetMargin[U32](node:Pointer[_Ygnode] tag, edge:U32)
-use @YGNodeStyleSetPadding[None](node:Pointer[_Ygnode] tag, edge:U32, padding:F32)
-use @YGNodeStyleSetPaddingPercent[None](node:Pointer[_Ygnode] tag, edge:U32, padding:F32)
-use @YGNodeStyleGetPadding[U32](node:Pointer[_Ygnode] tag, edge:U32)
-use @YGNodeStyleSetBorder[None](node:Pointer[_Ygnode] tag, edge:U32, border:F32)
-use @YGNodeStyleGetBorder[F32](node:Pointer[_Ygnode] tag, edge:U32)
-use @YGNodeStyleSetWidth[None](node:Pointer[_Ygnode] tag, width:F32)
-use @YGNodeStyleSetWidthPercent[None](node:Pointer[_Ygnode] tag, width:F32)
-use @YGNodeStyleSetWidthAuto[None](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleGetWidth[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetHeight[None](node:Pointer[_Ygnode] tag, height:F32)
-use @YGNodeStyleSetHeightPercent[None](node:Pointer[_Ygnode] tag, height:F32)
-use @YGNodeStyleSetHeightAuto[None](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleGetHeight[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetMinWidth[None](node:Pointer[_Ygnode] tag, minWidth:F32)
-use @YGNodeStyleSetMinWidthPercent[None](node:Pointer[_Ygnode] tag, minWidth:F32)
-use @YGNodeStyleGetMinWidth[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetMinHeight[None](node:Pointer[_Ygnode] tag, minHeight:F32)
-use @YGNodeStyleSetMinHeightPercent[None](node:Pointer[_Ygnode] tag, minHeight:F32)
-use @YGNodeStyleGetMinHeight[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetMaxWidth[None](node:Pointer[_Ygnode] tag, maxWidth:F32)
-use @YGNodeStyleSetMaxWidthPercent[None](node:Pointer[_Ygnode] tag, maxWidth:F32)
-use @YGNodeStyleGetMaxWidth[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetMaxHeight[None](node:Pointer[_Ygnode] tag, maxHeight:F32)
-use @YGNodeStyleSetMaxHeightPercent[None](node:Pointer[_Ygnode] tag, maxHeight:F32)
-use @YGNodeStyleGetMaxHeight[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeStyleSetAspectRatio[None](node:Pointer[_Ygnode] tag, aspectRatio:F32)
-use @YGNodeStyleGetAspectRatio[F32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetLeft[F32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetTop[F32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetRight[F32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetBottom[F32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetWidth[F32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetHeight[F32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetDirection[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetHadOverflow[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetDidLegacyStretchFlagAffectLayout[U32](node:Pointer[_Ygnode] tag)
-use @YGNodeLayoutGetMargin[F32](node:Pointer[_Ygnode] tag, edge:U32)
-use @YGNodeLayoutGetBorder[F32](node:Pointer[_Ygnode] tag, edge:U32)
-use @YGNodeLayoutGetPadding[F32](node:Pointer[_Ygnode] tag, edge:U32)
-use @YGConfigSetLogger[None](config:Pointer[_Ygconfig] tag, logger:Pointer[None] tag)
+use @YGNodeCanUseCachedMeasurement[U32](widthMode:U32, width:F32, heightMode:U32, height:F32, lastWidthMode:U32, lastWidth:F32, lastHeightMode:U32, lastHeight:F32, lastComputedWidth:F32, lastComputedHeight:F32, marginRow:F32, marginColumn:F32, config:Pointer[YGConfig] tag)
+use @YGNodeCopyStyle[None](dstNode:Pointer[YGNode] tag, srcNode:Pointer[YGNode] tag)
+use @YGNodeGetContext[Pointer[None]](node:Pointer[YGNode] tag)
+use @YGNodeSetContext[None](node:Pointer[YGNode] tag, context:Pointer[None] tag)
+use @YGConfigSetPrintTreeFlag[None](config:Pointer[YGConfig] tag, enabled:U32)
+use @YGNodeHasMeasureFunc[U32](node:Pointer[YGNode] tag)
+use @YGNodeSetMeasureFunc[None](node:Pointer[YGNode] tag, measureFunc:U32)
+use @YGNodeHasBaselineFunc[U32](node:Pointer[YGNode] tag)
+use @YGNodeSetBaselineFunc[None](node:Pointer[YGNode] tag, baselineFunc:Pointer[None] tag)
+use @YGNodeGetDirtiedFunc[Pointer[None]](node:Pointer[YGNode] tag)
+use @YGNodeSetDirtiedFunc[None](node:Pointer[YGNode] tag, dirtiedFunc:Pointer[None] tag)
+use @YGNodeSetPrintFunc[None](node:Pointer[YGNode] tag, printFunc:Pointer[None] tag)
+use @YGNodeGetHasNewLayout[U32](node:Pointer[YGNode] tag)
+use @YGNodeSetHasNewLayout[None](node:Pointer[YGNode] tag, hasNewLayout:U32)
+use @YGNodeGetNodeType[U32](node:Pointer[YGNode] tag)
+use @YGNodeSetNodeType[None](node:Pointer[YGNode] tag, nodeType:U32)
+use @YGNodeIsDirty[U32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetDidUseLegacyFlag[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetDirection[None](node:Pointer[YGNode] tag, direction:U32)
+use @YGNodeStyleGetDirection[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetFlexDirection[None](node:Pointer[YGNode] tag, flexDirection:U32)
+use @YGNodeStyleGetFlexDirection[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetJustifyContent[None](node:Pointer[YGNode] tag, justifyContent:U32)
+use @YGNodeStyleGetJustifyContent[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetAlignContent[None](node:Pointer[YGNode] tag, alignContent:U32)
+use @YGNodeStyleGetAlignContent[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetAlignItems[None](node:Pointer[YGNode] tag, alignItems:U32)
+use @YGNodeStyleGetAlignItems[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetAlignSelf[None](node:Pointer[YGNode] tag, alignSelf:U32)
+use @YGNodeStyleGetAlignSelf[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetPositionType[None](node:Pointer[YGNode] tag, positionType:U32)
+use @YGNodeStyleGetPositionType[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetFlexWrap[None](node:Pointer[YGNode] tag, flexWrap:U32)
+use @YGNodeStyleGetFlexWrap[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetOverflow[None](node:Pointer[YGNode] tag, overflow:U32)
+use @YGNodeStyleGetOverflow[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetDisplay[None](node:Pointer[YGNode] tag, display:U32)
+use @YGNodeStyleGetDisplay[U32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetFlex[None](node:Pointer[YGNode] tag, flex:F32)
+use @YGNodeStyleGetFlex[F32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetFlexGrow[None](node:Pointer[YGNode] tag, flexGrow:F32)
+use @YGNodeStyleGetFlexGrow[F32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetFlexShrink[None](node:Pointer[YGNode] tag, flexShrink:F32)
+use @YGNodeStyleGetFlexShrink[F32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetFlexBasis[None](node:Pointer[YGNode] tag, flexBasis:F32)
+use @YGNodeStyleSetFlexBasisPercent[None](node:Pointer[YGNode] tag, flexBasis:F32)
+use @YGNodeStyleSetFlexBasisAuto[None](node:Pointer[YGNode] tag)
+use @YGNodeStyleGetFlexBasis[F32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetPosition[None](node:Pointer[YGNode] tag, edge:U32, position:F32)
+use @YGNodeStyleSetPositionPercent[None](node:Pointer[YGNode] tag, edge:U32, position:F32)
+use @YGNodeStyleGetPosition[F32](node:Pointer[YGNode] tag, edge:U32)
+use @YGNodeStyleSetMargin[None](node:Pointer[YGNode] tag, edge:U32, margin:F32)
+use @YGNodeStyleSetMarginPercent[None](node:Pointer[YGNode] tag, edge:U32, margin:F32)
+use @YGNodeStyleSetMarginAuto[None](node:Pointer[YGNode] tag, edge:U32)
+use @YGNodeStyleGetMargin[F32](node:Pointer[YGNode] tag, edge:U32)
+use @YGNodeStyleSetPadding[None](node:Pointer[YGNode] tag, edge:U32, padding:F32)
+use @YGNodeStyleSetPaddingPercent[None](node:Pointer[YGNode] tag, edge:U32, padding:F32)
+use @YGNodeStyleGetPadding[F32](node:Pointer[YGNode] tag, edge:U32)
+use @YGNodeStyleSetBorder[None](node:Pointer[YGNode] tag, edge:U32, border:F32)
+use @YGNodeStyleGetBorder[F32](node:Pointer[YGNode] tag, edge:U32)
+use @YGNodeStyleSetWidth[None](node:Pointer[YGNode] tag, width:F32)
+use @YGNodeStyleSetWidthPercent[None](node:Pointer[YGNode] tag, width:F32)
+use @YGNodeStyleSetWidthAuto[None](node:Pointer[YGNode] tag)
+use @YGNodeStyleGetWidth[F32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetHeight[None](node:Pointer[YGNode] tag, height:F32)
+use @YGNodeStyleSetHeightPercent[None](node:Pointer[YGNode] tag, height:F32)
+use @YGNodeStyleSetHeightAuto[None](node:Pointer[YGNode] tag)
+use @YGNodeStyleGetHeight[F32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetMinWidth[None](node:Pointer[YGNode] tag, minWidth:F32)
+use @YGNodeStyleSetMinWidthPercent[None](node:Pointer[YGNode] tag, minWidth:F32)
+use @YGNodeStyleGetMinWidth[F32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetMinHeight[None](node:Pointer[YGNode] tag, minHeight:F32)
+use @YGNodeStyleSetMinHeightPercent[None](node:Pointer[YGNode] tag, minHeight:F32)
+use @YGNodeStyleGetMinHeight[F32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetMaxWidth[None](node:Pointer[YGNode] tag, maxWidth:F32)
+use @YGNodeStyleSetMaxWidthPercent[None](node:Pointer[YGNode] tag, maxWidth:F32)
+use @YGNodeStyleGetMaxWidth[F32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetMaxHeight[None](node:Pointer[YGNode] tag, maxHeight:F32)
+use @YGNodeStyleSetMaxHeightPercent[None](node:Pointer[YGNode] tag, maxHeight:F32)
+use @YGNodeStyleGetMaxHeight[F32](node:Pointer[YGNode] tag)
+use @YGNodeStyleSetAspectRatio[None](node:Pointer[YGNode] tag, aspectRatio:F32)
+use @YGNodeStyleGetAspectRatio[F32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetLeft[F32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetTop[F32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetRight[F32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetBottom[F32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetWidth[F32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetHeight[F32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetDirection[U32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetHadOverflow[U32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetDidLegacyStretchFlagAffectLayout[U32](node:Pointer[YGNode] tag)
+use @YGNodeLayoutGetMargin[F32](node:Pointer[YGNode] tag, edge:U32)
+use @YGNodeLayoutGetBorder[F32](node:Pointer[YGNode] tag, edge:U32)
+use @YGNodeLayoutGetPadding[F32](node:Pointer[YGNode] tag, edge:U32)
+use @YGConfigSetLogger[None](config:Pointer[YGConfig] tag, logger:Pointer[None] tag)
 use @YGAssert[None](condition:U32, message:Pointer[U8] tag)
-use @YGAssertWithNode[None](node:Pointer[_Ygnode] tag, condition:U32, message:Pointer[U8] tag)
-use @YGAssertWithConfig[None](config:Pointer[_Ygconfig] tag, condition:U32, message:Pointer[U8] tag)
-use @YGConfigSetPointScaleFactor[None](config:Pointer[_Ygconfig] tag, pixelsInPoint:F32)
-use @YGConfigSetShouldDiffLayoutWithoutLegacyStretchBehaviour[None](config:Pointer[_Ygconfig] tag, shouldDiffLayout:U32)
-use @YGConfigSetUseLegacyStretchBehaviour[None](config:Pointer[_Ygconfig] tag, useLegacyStretchBehaviour:U32)
-use @YGConfigNew[Pointer[_Ygconfig]]()
-use @YGConfigFree[None](config:Pointer[_Ygconfig] tag)
-use @YGConfigCopy[None](dest:Pointer[_Ygconfig] tag, src:Pointer[_Ygconfig] tag)
+use @YGAssertWithNode[None](node:Pointer[YGNode] tag, condition:U32, message:Pointer[U8] tag)
+use @YGAssertWithConfig[None](config:Pointer[YGConfig] tag, condition:U32, message:Pointer[U8] tag)
+use @YGConfigSetPointScaleFactor[None](config:Pointer[YGConfig] tag, pixelsInPoint:F32)
+use @YGConfigSetShouldDiffLayoutWithoutLegacyStretchBehaviour[None](config:Pointer[YGConfig] tag, shouldDiffLayout:U32)
+use @YGConfigSetUseLegacyStretchBehaviour[None](config:Pointer[YGConfig] tag, useLegacyStretchBehaviour:U32)
+use @YGConfigNew[Pointer[YGConfig]]()
+use @YGConfigFree[None](config:Pointer[YGConfig] tag)
+use @YGConfigCopy[None](dest:Pointer[YGConfig] tag, src:Pointer[YGConfig] tag)
 use @YGConfigGetInstanceCount[I64]()
-use @YGConfigSetExperimentalFeatureEnabled[None](config:Pointer[_Ygconfig] tag, feature:U32, enabled:U32)
-use @YGConfigIsExperimentalFeatureEnabled[U32](config:Pointer[_Ygconfig] tag, feature:U32)
-use @YGConfigSetUseWebDefaults[None](config:Pointer[_Ygconfig] tag, enabled:U32)
-use @YGConfigGetUseWebDefaults[U32](config:Pointer[_Ygconfig] tag)
-use @YGConfigSetCloneNodeFunc[None](config:Pointer[_Ygconfig] tag, callback:Pointer[None] tag)
-use @YGConfigGetDefault[Pointer[_Ygconfig]]()
-use @YGConfigSetContext[None](config:Pointer[_Ygconfig] tag, context:Pointer[None] tag)
-use @YGConfigGetContext[Pointer[None]](config:Pointer[_Ygconfig] tag)
+use @YGConfigSetExperimentalFeatureEnabled[None](config:Pointer[YGConfig] tag, feature:U32, enabled:U32)
+use @YGConfigIsExperimentalFeatureEnabled[U32](config:Pointer[YGConfig] tag, feature:U32)
+use @YGConfigSetUseWebDefaults[None](config:Pointer[YGConfig] tag, enabled:U32)
+use @YGConfigGetUseWebDefaults[U32](config:Pointer[YGConfig] tag)
+use @YGConfigSetCloneNodeFunc[None](config:Pointer[YGConfig] tag, callback:Pointer[None] tag)
+use @YGConfigGetDefault[Pointer[YGConfig]]()
+use @YGConfigSetContext[None](config:Pointer[YGConfig] tag, context:Pointer[None] tag)
+use @YGConfigGetContext[Pointer[None]](config:Pointer[YGConfig] tag)
 use @YGRoundValueToPixelGrid[F32](value:F32, pointScaleFactor:F32, forceCeil:U32, forceFloor:U32)
-*/
+
+
+primitive YGConfig
+type YGConfigRef is Pointer[YGConfig]
+
+primitive YGNode
+type YGNodeRef is Pointer[YGNode]
+
+
+
+primitive YGConfig
+type YGConfigRef is Pointer[YGConfig]
+
+primitive YGNode
+type YGNodeRef is Pointer[YGNode]
+  */
