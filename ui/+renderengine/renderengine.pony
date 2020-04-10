@@ -141,7 +141,7 @@ actor@ RenderEngine
     end
   
   be updateBounds(w:F32, h:F32) =>
-  // update the size of my node to match the window, then relayout everything
+    // update the size of my node to match the window, then relayout everything
     node.>width(w).>height(h)
     layout()
       
@@ -177,7 +177,7 @@ actor@ RenderEngine
       let frameContext = FrameContext(this, renderContext, node.id(), frameNumber, 0, M4fun.id())
       waitingOnViewsToRender = node.render(frameContext)
     else
-      @RenderEngine_render(renderContext, frameNumber, U64.max_value(), ShaderType.finished(), 0, UnsafePointer[F32], 0, 1.0, 1.0, 1.0, 1.0, Pointer[U8])
+      @RenderEngine_render(renderContext, frameNumber, U64.max_value(), ShaderType.finished, 0, UnsafePointer[F32], 0, 1.0, 1.0, 1.0, 1.0, Pointer[U8])
     end
   
   be setNeedsRendered() =>
@@ -204,7 +204,7 @@ actor@ RenderEngine
       waitingOnViewsToRender = waitingOnViewsToRender - 1
       if waitingOnViewsToRender == 0 then
         // When all of the views have rendered, THEN call finished
-        @RenderEngine_render(renderContext, frameNumber, U64.max_value(), ShaderType.finished(), 0, UnsafePointer[F32], 0, 1.0, 1.0, 1.0, 1.0, Pointer[U8])
+        @RenderEngine_render(renderContext, frameNumber, U64.max_value(), ShaderType.finished, 0, UnsafePointer[F32], 0, 1.0, 1.0, 1.0, 1.0, Pointer[U8])
       end
     end
   
