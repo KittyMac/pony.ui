@@ -8,7 +8,7 @@ native_cc=clang
 native_ar=ar
 
 all: stub-native copy-libs
-	corral exec -- ponyc --extfun -p $(lib_dir) -o ./build/ ./ui
+	corral run -- ponyc --extfun -p $(lib_dir) -o ./build/ ./ui
 	./build/ui
 
 test: stub-native copy-libs
@@ -42,6 +42,7 @@ corral-local:
 	@corral add /Volumes/Development/Development/pony/pony.utility -q
 	@corral add /Volumes/Development/Development/pony/pony.bitmap -q
 	@corral add /Volumes/Development/Development/pony/ponylang-linal -q
+	@corral add /Volumes/Development/Development/pony/pony.easings -q
 
 corral-git:
 	-@rm corral.json
@@ -53,6 +54,7 @@ corral-git:
 	@corral add github.com/KittyMac/pony.utility.git -q
 	@corral add github.com/KittyMac/pony.bitmap.git -q
 	@corral add github.com/KittyMac/ponylang-linal.git -q
+	@corral add github.com/KittyMac/pony.easings -q
 
 ci: yoga_lib_dir = ./_corral/github_com_KittyMac_pony_yoga/lib/
 ci: bitmap_lib_dir = ./_corral/github_com_KittyMac_pony_bitmap/lib/
