@@ -125,7 +125,7 @@ actor@ RenderEngine
   
   fun _tag():U32 => 2002
   fun _batch():U32 => 5_000_000
-  fun _prioritiy():U32 => 999
+  fun _prioritiy():U32 => -1
   
   fun tag root():String val => "Root"
   
