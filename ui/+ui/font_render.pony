@@ -340,15 +340,17 @@ class FontRender
       st_x_max = g.tx + (g.tw * w_mod)
       st_y_max = g.ty + (g.th * h_mod)
       
-      RenderPrimitive.quadVT(frameContext,    vertices,   
-                              V3fun(x_min,  y_min, 0.0), 
-                              V3fun(x_max,  y_min, 0.0),
-                              V3fun(x_max,  y_max, 0.0),
-                              V3fun(x_min,  y_max, 0.0),
-                              V2fun(st_x_min, 1.0 - st_y_min),
-                              V2fun(st_x_max, 1.0 - st_y_min),
-                              V2fun(st_x_max, 1.0 - st_y_max),
-                              V2fun(st_x_min, 1.0 - st_y_max) )
+      if (x_max > x_min) and (y_max > y_min) then
+        RenderPrimitive.quadVT(frameContext, vertices,   
+                                V3fun(x_min, y_min, 0.0), 
+                                V3fun(x_max, y_min, 0.0),
+                                V3fun(x_max, y_max, 0.0),
+                                V3fun(x_min, y_max, 0.0),
+                                V2fun(st_x_min, 1.0 - st_y_min),
+                                V2fun(st_x_max, 1.0 - st_y_min),
+                                V2fun(st_x_max, 1.0 - st_y_max),
+                                V2fun(st_x_min, 1.0 - st_y_max) )
+      end
     end
         
     geom
