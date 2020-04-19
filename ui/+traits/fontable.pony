@@ -42,13 +42,6 @@ trait Fontable is (Colorable & Viewable)
   be bottom() =>
     fontRender.fontVerticalAlignment = VerticalAlignment.bottom
     
-  fun ref start(frameContext:FrameContext val) =>
-    if _sizeToFit then
-      resizeToFit(frameContext, true)
-    else
-      RenderPrimitive.startFinished(frameContext)
-    end
-  
   fun ref resizeToFit(frameContext:FrameContext val, isStart:Bool):F32 =>
     if _sizedAtWidth != frameContext.nodeSize._1 then
       _sizedAtWidth = frameContext.nodeSize._1
@@ -70,8 +63,15 @@ trait Fontable is (Colorable & Viewable)
     else
       frameContext.nodeSize._2
     end
-
-	fun ref render(frameContext:FrameContext val, bounds:R4) =>    
+  
+  fun ref fontable_start(frameContext:FrameContext val) =>
+    if _sizeToFit then
+      resizeToFit(frameContext, true)
+    else
+      RenderPrimitive.startFinished(frameContext)
+    end
+  
+	fun ref fontable_render(frameContext:FrameContext val, bounds:R4) =>    
     // If our layout has changed since the last time we measured our height, then we need to re-measure
     // it and fix our bounds (for this render) to match the corrected bounds (for the upcoming render)
     var topOffset:F32 = 0
@@ -89,3 +89,8 @@ trait Fontable is (Colorable & Viewable)
     let geom = fontRender.geometry(frameContext, _value, bounds, topOffset)
     RenderPrimitive.renderCachedGeometry(frameContext, 0, ShaderType.sdf, geom.vertices, fontRender.fontColor, fontRender.font.name.cpointer())
 	
+  fun ref start(frameContext:FrameContext val) =>
+    fontable_start(frameContext)
+
+  fun ref render(frameContext:FrameContext val, bounds:R4) =>
+    fontable_render(frameContext, bounds)
