@@ -39,8 +39,14 @@ class KeyEvent
   fun delete():Bool =>
     (keyCode == 51) or (keyCode == 117)
   
+  fun enter():Bool =>
+    (keyCode == 36) or (keyCode == 76)
+  
   fun tab():Bool =>
     (keyCode == 48)
+  
+  fun escape():Bool =>
+    (keyCode == 53)
   
   new val create(pressed':Bool, keyCode':U16, characters':String val, x:F32, y:F32) =>
     pressed = pressed'

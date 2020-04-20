@@ -21,6 +21,8 @@ type RenderEngineCommandReturn is (None | LayoutNeeded | RenderNeeded)
 
 type GetYogaNodeCallback is {((YogaNode ref | None)):RenderEngineCommandReturn} val
 
+type RunCallback is {(RenderEngine ref)} val
+
 primitive SafeEdges
   fun top():F32 => @RenderEngine_safeTop()
   fun left():F32 => @RenderEngine_safeLeft()
@@ -169,6 +171,9 @@ actor@ RenderEngine
     node.addChild( consume yoga )
     handleNewNodeAdded()
   
+  be run(callback:RunCallback) =>
+    callback(this)
+  
   be getNodeByName(nodeName:String val, callback:GetYogaNodeCallback) =>
     match callback(node.getNodeByName(nodeName))
     | LayoutNeeded => layoutNeeded = true
@@ -199,6 +204,18 @@ actor@ RenderEngine
       focusedNodeID = 0      
       invalidateNodeByID(id)
       renderNeeded = true
+    end
+  
+  be advanceFocus() =>
+    let focusNode = node.getNodeByID(focusedNodeID)
+    if focusNode as YogaNode then
+      let nextNode = node.getNodeByFocusIdx(focusNode.getFocusIdx() + 1)
+      releaseFocus(focusedNodeID)
+      if nextNode as YogaNode then
+        requestFocus(nextNode.id())
+      end
+    else
+      releaseFocus(focusedNodeID)
     end
   
   be updateBounds(w:F32, h:F32, safeTop:F32, safeLeft:F32, safeBottom:F32, safeRight:F32) =>
