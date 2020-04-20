@@ -3,6 +3,7 @@ use "utility"
 
 actor TextField is (Fontable & Buttonable & Actionable & Syncable)
 	var _color:RGBA val = RGBA.black()
+  var focusable:Bool = true
   
   fun ref start(frameContext:FrameContext val) =>
     fontable_start(frameContext)
