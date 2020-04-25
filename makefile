@@ -17,10 +17,13 @@ test: stub-native copy-libs
 
 
 stub-native:
-	@cd build
+	@mkdir -p $(build_dir)
+	@cd $(build_dir)
 	@$(native_cc) -arch x86_64 -arch i386 -fPIC -Wall -Wextra -O3 -g -c -o $(build_dir)/renderengine.o stub/*.c
 	@lipo -create -output $(lib_dir)/librenderengine-osx.a $(build_dir)/renderengine.o
 
+clean:
+	rm -rf $(build_dir)
 
 copy-libs:
 	@cp ${bitmap_lib_dir}/*.a $(lib_dir)
