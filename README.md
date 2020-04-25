@@ -6,6 +6,7 @@
 
 A "fully concurrent" user interface written in Pony.
 
+Note that this repository attempts to house the Pony UI code, but as with all UI code it needs to be married to platform specific code (for opening windows, rendering images, etc). As of the time of this writing, pony.ui is solely used by [Pony Express](https://github.com/KittyMac/PonyExpress), which provides the platform half of the equation for iOS, macOS and tvOS.
 
 
 ## License
