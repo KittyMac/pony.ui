@@ -44,6 +44,10 @@ class YogaNode
   fun id():YogaNodeID =>
     node.usize()
   
+  fun string():String iso^ =>
+    let nodeTag:YGNodeRef tag = node
+    recover String.copy_cstring(@YGNodePrintString(nodeTag, YGPrintOptions.layout or YGPrintOptions.style or YGPrintOptions.children)) end
+  
   fun ref getChildren():Array[YogaNode] => children
   
   fun ref addChild(child:YogaNode) =>
