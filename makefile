@@ -46,6 +46,7 @@ corral-local:
 	@corral add /Volumes/Development/Development/pony/pony.bitmap -q
 	@corral add /Volumes/Development/Development/pony/ponylang-linal -q
 	@corral add /Volumes/Development/Development/pony/pony.easings -q
+	@corral add /Volumes/Development/Development/pony/pony.laba -q
 
 corral-git:
 	-@rm corral.json
@@ -58,6 +59,7 @@ corral-git:
 	@corral add github.com/KittyMac/pony.bitmap.git -q
 	@corral add github.com/KittyMac/ponylang-linal.git -q
 	@corral add github.com/KittyMac/pony.easings -q
+	@corral add github.com/KittyMac/pony.laba -q
 
 ci: yoga_lib_dir = ./_corral/github_com_KittyMac_pony_yoga/lib/
 ci: bitmap_lib_dir = ./_corral/github_com_KittyMac_pony_bitmap/lib/

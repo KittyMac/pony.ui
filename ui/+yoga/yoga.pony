@@ -4,6 +4,7 @@ use "collections"
 use "linal"
 use "promises"
 use "utility"
+use "laba"
 
 type YogaNodeID is USize
 
@@ -27,6 +28,8 @@ class YogaNode
   var _safeLeft:Bool = false
   var _safeBottom:Bool = false
   var _safeRight:Bool = false
+  
+  var labaAnimations:Array[Laba] = Array[Laba](32)
   
   var _focusIdx:ISize = -1
   
@@ -323,6 +326,8 @@ class YogaNode
     
     end
     
+    animate(frameContext.animation_delta)
+    
     n
   
   
@@ -365,8 +370,24 @@ class YogaNode
                            _pushedClippingVertices.cpointer(),
                            _pushedClippingVertices.allocSize().u32() )
     RenderPrimitive.renderFinished(frameContext)
+
+  fun ref isAnimating():Bool =>
+    labaAnimations.size() > 0
   
+  fun ref laba(labaStr:String val) =>
+    labaAnimations.push(Laba(this, labaStr))
   
+  fun ref animate(delta:F32 val) =>
+    try
+      let n = labaAnimations.size()
+      for i in Range(0,n) do
+        let animation = labaAnimations((n - i) - 1)?
+        if animation.animate(delta) then
+          labaAnimations.deleteAll(animation)
+        end
+      end
+    end
+
   
   fun ref view(local_view:Viewable) =>
     _views.push(local_view)
@@ -376,7 +397,6 @@ class YogaNode
   
   fun ref clips(_clips':Bool) =>
     _clips = _clips'
-  
   
   fun getFocusIdx():ISize =>
     _focusIdx
@@ -541,11 +561,10 @@ class YogaNode
   fun ref aspectRatio(v:F32) => @YGNodeStyleSetAspectRatio(node, v)
   
   
-  
-  
   fun getWidth():F32 => @YGNodeStyleGetWidth(node)
   fun getHeight():F32 => @YGNodeStyleGetHeight(node)
-  
+  fun getTop():F32 => @YGNodeLayoutGetTop(node)
+  fun getLeft():F32 => @YGNodeLayoutGetLeft(node)
   
   /*
 
