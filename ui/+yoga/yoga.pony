@@ -17,6 +17,8 @@ class YogaNode
   var last_bounds:R4 = R4fun.zero()
   var last_matrix:M4 = M4fun.id()
   
+  var sibling_index:USize = 0
+  
   var _content_offset:V2 = V2fun.zero()
   var _rotation:V3 = V3fun.zero()
   
@@ -189,8 +191,11 @@ class YogaNode
     if _safeBottom then padding(YGEdge.bottom, SafeEdges.bottom()) end
     if _safeRight then padding(YGEdge.right, SafeEdges.right()) end  
     
+    var idx:USize = 0
     for child in children.values() do
+      child.sibling_index = idx
       child.preLayout()
+      idx = idx + 1
     end
   
   // Called when distributing events to nodes
@@ -374,8 +379,27 @@ class YogaNode
   fun ref isAnimating():Bool =>
     labaAnimations.size() > 0
   
-  fun ref laba(labaStr:String val) =>
-    labaAnimations.push(Laba(this, labaStr))
+  fun ref laba(labaStr:String val,arg0:LabaArgument = None,
+                                  arg1:LabaArgument = None, 
+                                  arg2:LabaArgument = None,
+                          				arg3:LabaArgument = None,
+                          				arg4:LabaArgument = None,
+                          				arg5:LabaArgument = None,
+                          				arg6:LabaArgument = None,
+                          				arg7:LabaArgument = None,
+                          				arg8:LabaArgument = None,
+                          				arg9:LabaArgument = None,
+                          				arg10:LabaArgument = None,
+                          				arg11:LabaArgument = None, 
+                          				arg12:LabaArgument = None,
+                          				arg13:LabaArgument = None,
+                          				arg14:LabaArgument = None,
+                          				arg15:LabaArgument = None,
+                          				arg16:LabaArgument = None,
+                          				arg17:LabaArgument = None,
+                          				arg18:LabaArgument = None,
+                          				arg19:LabaArgument = None) =>
+    labaAnimations.push(Laba(this, labaStr, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19))
   
   fun ref animate(delta:F32 val) =>
     try
