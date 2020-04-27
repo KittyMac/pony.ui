@@ -333,6 +333,10 @@ class YogaNode
     
     animate(frameContext.animation_delta)
     
+    if isAnimating() then
+      frameContext.engine.setNeedsLayout()
+    end
+    
     n
   
   
@@ -585,10 +589,12 @@ class YogaNode
   fun ref aspectRatio(v:F32) => @YGNodeStyleSetAspectRatio(node, v)
   
   
-  fun getWidth():F32 => @YGNodeStyleGetWidth(node)
-  fun getHeight():F32 => @YGNodeStyleGetHeight(node)
-  fun getTop():F32 => @YGNodeLayoutGetTop(node)
-  fun getLeft():F32 => @YGNodeLayoutGetLeft(node)
+  fun _handleNAN(v:F32):F32 => if v.nan() then 0.0 else v end
+  
+  fun getWidth():F32 => _handleNAN(@YGNodeStyleGetWidth(node))
+  fun getHeight():F32 => _handleNAN(@YGNodeStyleGetHeight(node))
+  fun getTop():F32 => _handleNAN(@YGNodeStyleGetPosition(node, YGEdge.top))
+  fun getLeft():F32 => _handleNAN(@YGNodeStyleGetPosition(node, YGEdge.left))
   
   /*
 
