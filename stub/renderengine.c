@@ -46,6 +46,7 @@ void RenderEngine_render(HALRenderContext * ctx,
                          float globalG,
                          float globalB,
                          float globalA,
+                         bool backfaceCulling,
                          const char * textureName) {
     UNUSED(ctx);
     UNUSED(frameNumber);
@@ -58,6 +59,7 @@ void RenderEngine_render(HALRenderContext * ctx,
     UNUSED(globalG);
     UNUSED(globalB);
     UNUSED(globalA);
+    UNUSED(backfaceCulling);
     UNUSED(textureName);
 }
 
