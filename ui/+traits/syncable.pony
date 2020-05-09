@@ -1,4 +1,5 @@
 use "linal"
+use "utility"
 
 type SyncType is (None|String|I32|U32|F32|I64|U64|F64)
 
